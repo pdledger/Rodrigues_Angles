@@ -1,0 +1,169 @@
+# Importing
+import sys
+from time import time
+import numpy as np
+import subprocess
+import cmath
+import os
+from numpy.linalg import norm
+import csv
+import array
+from matplotlib import pyplot as plt
+
+
+def load_raw_data():
+
+    #open file with eigenvectors - file has header, blank lines and spaces (nulls) in csv format
+    #file open reads in all data and saves to D1_list with header, blank lines and nulls removed 
+    with open('Raw_Data/Object4_eigenvectors.csv') as f:
+        reader = csv.reader(f)
+        next(reader) #dummy read of header
+
+        D1_list = [] #create data list
+        for row in reader:
+            if any(row): #pick up non-blank row
+                if len(row) != 1: #only append to list the non-blank rows
+                    this_row = row #read current row
+                    new_this_row = ' '.join(this_row).split() #remove nulls in data
+                    D1_list.append(new_this_row) #add data with removed nulls to list 
+
+
+
+    #convert list data to array - data now comprises of 7 column-wide data of:
+    # freq  EigVect(Re)1, x, y, z components, EigVect(Im)1, x, y, z components             
+    # freq  EigVect(Re)2, x, y, z components EigVect(Im)2, x, y, z components    
+    # freq  EigVect(Re)3, x, y, z components, EigVect(Im)3, x, y, z components    
+    # .... then the next 3 rows at the next frequency step
+    D2_array = np.array(D1_list, dtype=float)
+
+    #separate eigenvectors and frequencies for later processing
+    Eig_vect = D2_array[:,1:7] #Eigenvectors (3 Re components and 3 Im components)
+    F1 = D2_array[:,0] #frequencies with repeats
+    F1_length = len(F1) #array length
+    Freq = F1[0:F1_length:3] #access every 3rd element to remove repeated frequencies
+
+    #print to screen frequencies and the number of frequency points
+    print(' ')
+    print(Freq)
+    print("\nLength of frequency array...\n",len(Freq))
+    print(' ')
+
+    #loop thru' Eigenvector array and combine the real and imaginary parts
+    row = len(Eig_vect) #number of rows
+    Evec_comp1 = [] #initialise array
+    for i in range(0,row): #per  row
+        EvRe_1 = Eig_vect[i][0] #1st component in Re Eigenvectors 1,2,3 (all frequencies)
+        EvRe_2 = Eig_vect[i][1] #2nd component in Re Eigenvectors 1,2,3 (all frequencies)
+        EvRe_3 = Eig_vect[i][2] #3rd component in Re Eigenvectors 1,2,3 (all frequencies)
+        EvIm_1 = Eig_vect[i][3] #1st component in Im Eigenvectors 1,2,3 (all frequencies)
+        EvIm_2 = Eig_vect[i][4] #2nd component in Im Eigenvectors 1,2,3 (all frequencies)
+        EvIm_3 = Eig_vect[i][5] #3rd component in Im Eigenvectors 1,2,3 (all frequencies)
+
+        #combine Re and Im parts for the components of Eigenvectors (all frequencies) 
+        Evect1 = [EvRe_1 + 1j*EvIm_1] 
+        Evect2 = [EvRe_2 + 1j*EvIm_2]
+        Evect3 = [EvRe_3 + 1j*EvIm_3]
+
+        #combine Evect1, Evect2 and Evect3 into one array
+        this_Evec_comp1 = Evect1 + Evect2 + Evect3
+        Evec_comp1.append(this_Evec_comp1) #append to output array
+    
+    #rearrange Evec_comp1 to group eigenvectors row by row for a single frequency
+    #output data to new array Evec_compl_Reshape
+    k = int((row / 3)) #takes into account each frequency is repeated for 3 rows for eignevectors associated at that frequency
+    cnt = 0 #set counter at first row
+    Evec_comp1_Reshape = [] #initialise array
+    for p in range(0,k):
+
+        EigVect_1 = Evec_comp1[cnt][0:5] #pull out first eigenvector data
+        EigVect_2 = Evec_comp1[cnt + 1][0:5] #pull out second eigenvector data
+        EigVect_3 = Evec_comp1[cnt + 2][0:5] #pull out third eigenvector data
+
+        #write to new array and reformat data - each row is for a single frequency
+        #of 3 eigenvectors (each with x, y and z real and imaginary components)
+        EigVectGrp = EigVect_1 + EigVect_2 + EigVect_3 
+        Evec_comp1_Reshape.append(EigVectGrp) #append to output array 
+
+        cnt = cnt + 3 #update counter to next frequency group
+        
+
+    #print to screen reshaped complex eigenvector data
+    print(' ')
+    print(Evec_comp1_Reshape) 
+    print("\nLength of eigenvector array...\n",len(Evec_comp1_Reshape))
+    print(' ')
+
+
+    #calculation of angles between eigenvectors
+    #angles calculated by dot product divided by norm product
+    #three output angles refer to:
+    # theta1: angle between EigVector1 and EigVector2
+    # theta2: angle between EigVector1 and EigVector3
+    # theta3: angle between EigVector2 and EigVector3
+    #each outputted angle is complex
+    
+    
+    # Converting to numpy:
+    # for each frequency we have a 3x3 matrix of eigenvectors. So we reshape into an Nx3x3 array.
+    Evec_comp1_Reshape = np.asarray(Evec_comp1_Reshape)
+    Evec_comp1_Reshape = Evec_comp1_Reshape.reshape((len(Evec_comp1_Reshape), 3, 3))
+    print(Evec_comp1_Reshape.shape)
+    
+    
+    # Loading eigenvectors:
+    eigs = np.zeros((len(Evec_comp1_Reshape), 3), dtype=complex) # Storing as complex for consistency.
+    for i in range(3):
+        data = np.genfromtxt(f'Raw_Data/Object4_eigenvalue_{i+1}.csv', delimiter=',')
+        freqs = data[:,0] * 2*np.pi * 1e3 # in rad/s
+        eigs[:, i] = data[:,1] + 1j*data[:,2]
+
+    np.savetxt('Data/Eigenvalues.csv', eigs, delimiter=',')
+    np.savetxt('Data/Frequencies.csv', freqs)
+    
+    # Reconstructing tensors:
+    tensor_array = np.zeros((len(freqs), 9), dtype=complex)
+    for k in range(len(freqs)):
+        VR = np.squeeze(Evec_comp1_Reshape[k, :, :]).real
+        VI = np.squeeze(Evec_comp1_Reshape[k, :, :]).imag
+        uR = eigs[k,:].real
+        uI = eigs[k,:].imag
+        
+        tensor = VR @ np.diag(uR) @ np.linalg.inv(VR) + 1j*(VI @ np.diag(uI) @ np.linalg.inv(VI))
+        print(tensor.ravel())
+        print('\n')
+        tensor_array[k,:] = tensor.ravel()
+    
+    np.savetxt('Data/Tensors.csv', tensor_array, delimiter=',')
+    
+    # We don't have N0, so we assume N0_ij = 0.
+    # N0 = np.zeros((3,3))
+    N0 = tensor_array[0,:].real.reshape(3,3)
+    
+    np.savetxt('Data/N0.csv', N0, delimiter=',')
+    
+    tensor_array = tensor_array[1:,:]
+    freqs = freqs[1:]
+    np.savetxt('Data/Frequencies.csv', freqs)
+    np.savetxt('Data/Tensors.csv', tensor_array, delimiter=',')
+
+    
+    # Double check that eigenvalues for I are positive
+    check_eigs_R = np.zeros((len(freqs), 3))
+    check_eigs_I = np.zeros((len(freqs), 3))
+    for k in range(len(freqs)):
+        check_eigs_R[k,:] = np.linalg.eigvals(tensor_array[k,:].real.reshape((3,3)))
+        check_eigs_I[k,:] = np.linalg.eigvals(tensor_array[k,:].imag.reshape((3,3)))
+        
+    plt.figure()
+    plt.semilogx(freqs, check_eigs_R)
+    plt.xlabel(r'$\omega$')
+    plt.ylabel(r'$\Lambda_\tilde{\mathcal{R}}$')
+    plt.figure()
+    plt.semilogx(freqs, check_eigs_I)
+    plt.xlabel(r'$\omega$')
+    plt.ylabel(r'$\Lambda_{\mathcal{I}}$')
+    plt.show()
+    
+if __name__ == '__main__':
+    print(os.getcwd())
+    load_raw_data()
