@@ -48,8 +48,8 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
 
         normalisationapprox=0
         for j in range(3):
-            normalisationapprox-=2*(uI[j]*uR[j])
-        normalisationapprox+=(uI[1]*uR[0])+(uI[2]*uR[0])+(uI[0]*uR[1])+(uI[2]*uR[1])+(uI[0]*uR[2])+(uI[1]*uR[2])
+            normalisationapprox-=2*(uI[j]*uR[j])/np.sqrt(3)
+        normalisationapprox+=((uI[1]*uR[0])+(uI[2]*uR[0])+(uI[0]*uR[1])+(uI[2]*uR[1])+(uI[0]*uR[2])+(uI[1]*uR[2]))/np.sqrt(3)
 
         Fapproxconst[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisationapprox)
     Fapproxconst= np.sqrt(Fapproxconst)
