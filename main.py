@@ -39,6 +39,11 @@ def main(directory,MaxOmega):
         if Frequencies[n] > MaxOmega:
             Ntarget=n
             break
+        
+    # allow for frequency array less than max omega.
+    if MaxOmega > np.max(Frequencies):
+        Ntarget = -1
+        
     TensorArray = TensorArray[:Ntarget,:]
     Frequencies = Frequencies[:Ntarget]
     N=Ntarget
@@ -91,7 +96,7 @@ def main(directory,MaxOmega):
     ax1.set_ylabel(r'$\theta$ [rad]')
     ax1.legend()
     fig.tight_layout()
-    plt.show()
+    # plt.show()
 
     fig=plt.figure()
     ax1 = fig.add_subplot(211)
@@ -111,7 +116,7 @@ def main(directory,MaxOmega):
     ax1.legend()
     ax2.legend()
     fig.tight_layout()
-    plt.show()
+    # plt.show()
 
 
 
@@ -162,7 +167,7 @@ def main(directory,MaxOmega):
     ax1.legend()
     #ax2.legend()
     fig.tight_layout()
-    plt.show()
+    # plt.show()
 
     fig=plt.figure()
     ax1 = fig.add_subplot(211)
@@ -184,7 +189,7 @@ def main(directory,MaxOmega):
     ax1.legend()
     ax2.legend()
     fig.tight_layout()
-    plt.show()
+    # plt.show()
 
 
 
