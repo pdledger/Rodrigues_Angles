@@ -27,7 +27,7 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
                 QI[i,j] = QIstore[n,i,j]
         Rmult = MultRstore[n]
         Imult = MultIstore[n]
-
+        print(Rmult,Imult)
         if Rmult != Imult :
             print("error different multiplicties for R and I",Rmult,Imult)
             Tol=1e-4*np.min(np.abs(uR))
@@ -59,11 +59,18 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
             # Arrange for a mimimal angle
             if np.sign(QR[:,0]@QI[:,0])< 0:
                 QR[:,0] = - QR[:,0]
+            #if np.arccos(-QR[:,0]@QI[:,0])< np.arccos(QR[:,0]@QI[:,0]):
+            #    QR[:,0] = - QR[:,0]
+            #print(np.arccos(QR[:,0]@QI[:,0]))
             QR[:,1:3] = QI[:,1:3]
-
+            # Find the combinations of QR and QI that lead to a minimal angle
+            #QR, QI, uR = CheckOrdering(QR,QI,uR,0)
             min_angle, K, tvec = Rodrigues(QR,QI)
             dF_min = dFmetric(QR,QI)
+            #print(min_angle)
+            #time.sleep(10)
 
+            #QR, QI, uR = CheckOrdering(QR,QI,uR,1)
             # Arrange for a maximal angle
             if np.sign(QR[:,0]@QI[:,0])> 0:
                 QR[:,0] = - QR[:,0]
