@@ -31,7 +31,6 @@ def CheckOrdering(QR,QI,uR,minmax):
         theta=0.
 
 
-
     uRorg=np.copy(uR)
     QRorg=np.copy(QR)
     for n in range(48):
@@ -57,12 +56,18 @@ def CheckOrdering(QR,QI,uR,minmax):
                 theta=ntheta
                 nout=n
 
-    ind= option[nout,:]
-    uR=np.copy(uRorg)
-    QR=np.copy(QRorg)
-    uR = uR[ind]
-    QR = QR[:,ind]
-    for i in range(3):
-        QR[:,i]=signs[nout,i]*QR[:,i]
+    # For the chosen indices output uR,QR
+    # Remember ind contains a LIST of indices.
+    try: x
+    except NameError: x = None
+    if x != None:
+        ind= option[nout,:]
+        uR=np.copy(uRorg)
+        QR=np.copy(QRorg)
+
+        uR = uR[ind]
+        QR = QR[:,ind]
+        for i in range(3):
+            QR[:,i]=signs[nout,i]*QR[:,i]
 
     return QR, QI, uR

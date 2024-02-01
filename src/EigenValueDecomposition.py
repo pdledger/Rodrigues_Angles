@@ -25,6 +25,8 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         uR,VR = np.linalg.eig(R)
         uRtilde,VRtilde = np.linalg.eig(Rtilde)
         uI,VI = np.linalg.eig(I)
+        # nb output from np.linalg.eig is not necessarily in order
+
 
     # Possible multiplicities are 1, 2 or 3
     # If they are order in terms of increasing multiplicities we will either have
@@ -35,9 +37,15 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         MultI = CheckMult(uI,I)
         MultRtilde = CheckMult(uRtilde,Rtilde)
 
-        MultRstore[n] = MultR
-        MultIstore[n] = MultI
-        MultRtildestore[n] = MultRtilde
+        # Reorder eigenvalues/eigenvectors depending on multiplicity
+        uR,VR,MultR=Reorder(uR,VR,MultR)
+        uI,VI,MultI=Reorder(uI,VI,MultI)
+        uRtilde,VRtilde,MultRtilde=Reorder(uRtilde,VRtilde,MultRtilde)
+
+
+        MultRstore[n] = np.max(MultR)
+        MultIstore[n] = np.max(MultI)
+        MultRtildestore[n] = np.max(MultRtilde)
 
 
 
@@ -60,6 +68,34 @@ def CheckMult(u,Tensor):
     Tol=1e-4*np.min(np.abs(u))
     mult=0
     # Determine the multplicity of eigenvalue lambda_i as 3 - rank(R -lambda_i eye(3))
+    print(u)
+    mult=np.zeros(3)
     for i in range(3):
-        mult=np.max([mult,3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol)])
+        print(3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol))
+        mult[i]=3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol)
     return mult
+
+def Reorder(u,V,Mult):
+    # Choose to re-order eigenvalues/eigenvectors so that they are ordered in increasing multplicity.
+    # Possibilities 1)
+    # All distinct and have multplicity 1
+    # Two eigenvalues have multplicity 2 (swap maybe required.)
+    # All eigenvalues the same and have multplicity 3
+    Maxmult=np.max(Mult)
+    if Maxmult==2:
+        # Set the eigenvalue/eigenvector-pair to have multiplicity 1
+        newcol0=np.argmin(Mult)
+        if newcol0 !=0:
+            oldev=np.copy(u[0])
+            u[0]=np.copy(u[newcol0])
+            u[newcol0]=oldev
+            oldevec=np.copy(V[0,:])
+            V[0,:]=np.copy(V[newcol0,:])
+            V[newcol0,:]=oldevec
+            oldmult=np.copy(Mult[0])
+            Mult[0]=np.copy(Mult[newcol0])
+            Mult[newcol0] =oldmult
+            #print(u)
+            #print(V)
+            #print(Mult)
+    return u,V,Mult

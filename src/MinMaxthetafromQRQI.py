@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.linalg
+import time
 
 from Rodrigues import *
 from StableAngle import *
@@ -20,8 +21,10 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
         QR = np.zeros((3,3))
         QI = np.zeros((3,3))
         uR =np.zeros(3)
+        uI = np.zeros(3)
         for i in range(3):
             uR[i]=URstore[n,i]
+            uI[i]=UIstore[n,i]
             for j in range(3):
                 QR[i,j] = QRstore[n,i,j]
                 QI[i,j] = QIstore[n,i,j]
@@ -56,26 +59,33 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
         if Rmult==2:
             # Do a check for the first eigenvector
             angle = np.zeros(6)
+            #print(QR,QI,uR,uI)
+            #time.sleep(10)
             # Arrange for a mimimal angle
-            if np.sign(QR[:,0]@QI[:,0])< 0:
-                QR[:,0] = - QR[:,0]
+            #if np.sign(QR[:,0]@QI[:,0])< 0:
+            #    QR[:,0] = - QR[:,0]
             #if np.arccos(-QR[:,0]@QI[:,0])< np.arccos(QR[:,0]@QI[:,0]):
             #    QR[:,0] = - QR[:,0]
-            #print(np.arccos(QR[:,0]@QI[:,0]))
+            #print(np.arccos(QR[:,0]@QI[:,0]),np.arccos(-QR[:,0]@QI[:,0]) )
             QR[:,1:3] = QI[:,1:3]
+            #min_angle=np.arccos(QR[:,0]@QI[:,0])
+            #K=np.zeros((3,3))
+            #K[1,2]=-1
+            #K[2,1]=1
             # Find the combinations of QR and QI that lead to a minimal angle
             #QR, QI, uR = CheckOrdering(QR,QI,uR,0)
             min_angle, K, tvec = Rodrigues(QR,QI)
+            #print(min_angle)
             dF_min = dFmetric(QR,QI)
             #print(min_angle)
             #time.sleep(10)
 
             #QR, QI, uR = CheckOrdering(QR,QI,uR,1)
             # Arrange for a maximal angle
-            if np.sign(QR[:,0]@QI[:,0])> 0:
-                QR[:,0] = - QR[:,0]
+            #if np.sign(QR[:,0]@QI[:,0])> 0:
+            #    QR[:,0] = - QR[:,0]
             QR[:,1:3] = QI[:,1:3]
-
+            #QR, QI, uR = CheckOrdering(QR,QI,uR,1)
             max_angle, K, tvec = Rodrigues(QR,QI)
             dF_max = dFmetric(QR,QI)
 
@@ -92,7 +102,7 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
         MinAnglestore[n] = min_angle
         MaxAnglestore[n] = max_angle
         dFMinAnglestoreRI[n] = dF_min
-        dFMaxAnglestoreRI = dF_max
+        dFMaxAnglestoreRI[n] = dF_max
 
 
 
