@@ -68,10 +68,10 @@ def CheckMult(u,Tensor):
     Tol=1e-4*np.min(np.abs(u))
     mult=0
     # Determine the multplicity of eigenvalue lambda_i as 3 - rank(R -lambda_i eye(3))
-    print(u)
+    #print(u)
     mult=np.zeros(3)
     for i in range(3):
-        print(3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol))
+        #print(3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol))
         mult[i]=3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol)
     return mult
 

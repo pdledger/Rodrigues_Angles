@@ -58,9 +58,9 @@ def CheckOrdering(QR,QI,uR,minmax):
 
     # For the chosen indices output uR,QR
     # Remember ind contains a LIST of indices.
-    try: x
-    except NameError: x = None
-    if x != None:
+    try: nout
+    except NameError: nout = None
+    if nout != None:
         ind= option[nout,:]
         uR=np.copy(uRorg)
         QR=np.copy(QRorg)

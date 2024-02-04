@@ -6,7 +6,7 @@ from Rodrigues import *
 from StableAngle import *
 from CheckOrdering import *
 
-def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,MultIstore):
+def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,MultIstore,FixEvecs):
 
     # For each freuqncy use multiplicties to determine method for
     # obtaining angles
@@ -30,7 +30,7 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
                 QI[i,j] = QIstore[n,i,j]
         Rmult = MultRstore[n]
         Imult = MultIstore[n]
-        print(Rmult,Imult)
+        #print(Rmult,Imult)
         if Rmult != Imult :
             print("error different multiplicties for R and I",Rmult,Imult)
             Tol=1e-4*np.min(np.abs(uR))
@@ -62,12 +62,12 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
             #print(QR,QI,uR,uI)
             #time.sleep(10)
             # Arrange for a mimimal angle
-            #if np.sign(QR[:,0]@QI[:,0])< 0:
-            #    QR[:,0] = - QR[:,0]
-            #if np.arccos(-QR[:,0]@QI[:,0])< np.arccos(QR[:,0]@QI[:,0]):
-            #    QR[:,0] = - QR[:,0]
-            #print(np.arccos(QR[:,0]@QI[:,0]),np.arccos(-QR[:,0]@QI[:,0]) )
-            QR[:,1:3] = QI[:,1:3]
+            if FixEvecs=="Yes":
+                if np.sign(QR[:,0]@QI[:,0])< 0:
+                    QR[:,0] = - QR[:,0]
+                QR[:,1:3] = QI[:,1:3]
+            else:
+                QR, QI, uR = CheckOrdering(QR,QI,uR,0)
             #min_angle=np.arccos(QR[:,0]@QI[:,0])
             #K=np.zeros((3,3))
             #K[1,2]=-1
@@ -77,15 +77,17 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
             min_angle, K, tvec = Rodrigues(QR,QI)
             #print(min_angle)
             dF_min = dFmetric(QR,QI)
-            #print(min_angle)
+            print(min_angle)
             #time.sleep(10)
 
             #QR, QI, uR = CheckOrdering(QR,QI,uR,1)
             # Arrange for a maximal angle
-            #if np.sign(QR[:,0]@QI[:,0])> 0:
-            #    QR[:,0] = - QR[:,0]
-            QR[:,1:3] = QI[:,1:3]
-            #QR, QI, uR = CheckOrdering(QR,QI,uR,1)
+            if FixEvecs=="Yes":
+                if np.sign(QR[:,0]@QI[:,0])> 0:
+                    QR[:,0] = - QR[:,0]
+                QR[:,1:3] = QI[:,1:3]
+            else:
+                QR, QI, uR = CheckOrdering(QR,QI,uR,1)
             max_angle, K, tvec = Rodrigues(QR,QI)
             dF_max = dFmetric(QR,QI)
 
