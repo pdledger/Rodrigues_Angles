@@ -167,7 +167,7 @@ def main(directory,MaxOmega,Figures="On"):
 
 
     # Determine the maximal and minimal angles from QRtilde and QI also output d_F metric for these orderings
-    MinAnglestoreRtildeI, MaxAnglestoreRtildeI, dFMinAnglestoreRtildeI, dFMaxAnglestoreRtildeI = MinMaxthetafromQRQI(Frequencies,QRtildestore,QIstore,URtildestore, UIstore,MultRtildestore,MultIstore)
+    MinAnglestoreRtildeI, MaxAnglestoreRtildeI, dFMinAnglestoreRtildeI, dFMaxAnglestoreRtildeI = MinMaxthetafromQRQI(Frequencies,QRtildestore,QIstore,URtildestore, UIstore,MultRtildestore,MultIstore,FixEvecs)
 
     # Sort eigenvalues (and eigenvectors) so that || Lambda_Rtilde - Lambda_I || is maximal
     sorteigenvalues="MaxDifference"
