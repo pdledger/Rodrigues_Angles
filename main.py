@@ -104,8 +104,11 @@ def main(directory,MaxOmega,Figures="On"):
         plt.show()
 
     RIResults={"Frequencies": Frequencies, "MinAnglestoreRI": MinAnglestoreRI, "AnglestoreRIfmeasapprxconstsortedmaxdiff_max": AnglestoreRIfmeasapprxconstsortedmaxdiff_max, \
-        "AnglestoreRIfmeasapprxconstsortedmindiff_min": AnglestoreRIfmeasapprxconstsortedmindiff_min,"dFMinAnglestoreRI":dFMinAnglestoreRI, "dFMaxAnglestoreRI": dFMaxAnglestoreRI,
-        "AnglestoreRIcommeasapprxconstsortedmaxdiff_max":AnglestoreRIcommeasapprxconstsortedmaxdiff_max,"AnglestoreRIcommeasapprxconstsortedmindiff_min":AnglestoreRIcommeasapprxconstsortedmindiff_min}
+        "AnglestoreRIfmeasapprxconstsortedmindiff_min": AnglestoreRIfmeasapprxconstsortedmindiff_min, "AnglestoreRIfmeasapprxconstsortedmaxdiff_min": AnglestoreRIfmeasapprxconstsortedmaxdiff_min, \
+        "AnglestoreRIfmeasapprxconstsortedmindiff_max": AnglestoreRIfmeasapprxconstsortedmindiff_max,
+        "dFMinAnglestoreRI":dFMinAnglestoreRI, "dFMaxAnglestoreRI": dFMaxAnglestoreRI,
+        "AnglestoreRIcommeasapprxconstsortedmaxdiff_max":AnglestoreRIcommeasapprxconstsortedmaxdiff_max,"AnglestoreRIcommeasapprxconstsortedmindiff_min":AnglestoreRIcommeasapprxconstsortedmindiff_min,\
+        "AnglestoreRIcommeasapprxconstsortedmaxdiff_min":AnglestoreRIcommeasapprxconstsortedmaxdiff_min,"AnglestoreRIcommeasapprxconstsortedmindiff_max":AnglestoreRIcommeasapprxconstsortedmindiff_max}
 
     # Plots of minimal and maximal angles and compare with MaxDifference and MinDifference
     if Figures=="On":
@@ -178,6 +181,7 @@ def main(directory,MaxOmega,Figures="On"):
 
     #Obtain f meauses (approx and exact constant)
     #AnglestoreRtildeIfmeasfullconstsortedmaxdiff, AnglestoreRtildeIfmeasapprxconstsortedmaxdiff = Fmeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
+    print('Computing F measure Tilde')
     AnglestoreRtildeIfmeasfullconstsortedmaxdiff, AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_min, AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_max = Fmeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
 
     #Obtain Com meauses (approx and exact constant)
@@ -212,8 +216,13 @@ def main(directory,MaxOmega,Figures="On"):
         plt.show()
 
     RtildeIResults={"Frequencies": Frequencies, "MinAnglestoreRtildeI": MinAnglestoreRtildeI, "AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_max": AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_max, \
-        "AnglestoreRtildeIfmeasapprxconstsortedmindiff_min": AnglestoreRtildeIfmeasapprxconstsortedmindiff_min,"dFMinAnglestoreRtildeI":dFMinAnglestoreRtildeI, "dFMaxAnglestoreRtildeI": dFMaxAnglestoreRtildeI,\
-        "AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_max":AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_max,"AnglestoreRtildeIcommeasapprxconstsortedmindiff_min":AnglestoreRtildeIcommeasapprxconstsortedmindiff_min}
+        "AnglestoreRtildeIfmeasapprxconstsortedmindiff_min": AnglestoreRtildeIfmeasapprxconstsortedmindiff_min,"AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_min": AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_min,
+        "AnglestoreRtildeIfmeasapprxconstsortedmindiff_max": AnglestoreRtildeIfmeasapprxconstsortedmindiff_max,
+        "AnglestoreRtildeIfmeasfullconstsortedmindiff": AnglestoreRtildeIfmeasfullconstsortedmindiff,\
+        "AnglestoreRtildeIfmeasfullconstsortedmaxdiff": AnglestoreRtildeIfmeasfullconstsortedmaxdiff,\
+        "dFMinAnglestoreRtildeI":dFMinAnglestoreRtildeI, "dFMaxAnglestoreRtildeI": dFMaxAnglestoreRtildeI,\
+        "AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_max":AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_max,"AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_min":AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_min,\
+        "AnglestoreRtildeIcommeasapprxconstsortedmindiff_min":AnglestoreRtildeIcommeasapprxconstsortedmindiff_min, "AnglestoreRtildeIcommeasapprxconstsortedmindiff_max":AnglestoreRtildeIcommeasapprxconstsortedmindiff_max}
 
 
     # Plots of minimal and maximal angles and compare with MaxDifference and MinDifference

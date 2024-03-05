@@ -48,7 +48,9 @@ nmesh = geo.GenerateMesh(grading=0.5)
 
 # Setup the boundary layers
 mu0 = 4 * 3.14159 * 1e-7
-tau = (2/(max_target_frequency * sigma[0] * mu0 * mur[0]))**0.5 /alpha
+s = alpha / 1e-3
+tau = (2/(max_target_frequency * sigma[0] * mu0 * mur[0]))**0.5 /(alpha/s)
+print(s,tau)
 layer_thicknesses = [ (2**n)*tau for n in range(number_of_layers)]
 
 nmesh.BoundaryLayer(boundary=".*", thickness=layer_thicknesses, material=material_name[0],

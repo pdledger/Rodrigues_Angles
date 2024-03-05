@@ -9,7 +9,7 @@ from ngsolve import *
 #Function definition to set up default settings
 def DefaultSettings():
     #How many cores to be used (monitor memory consuption)
-    CPUs = 1 
+    CPUs = 4
     #(int)
 
     #Is it a big problem (more memory efficiency but slower)
@@ -94,7 +94,7 @@ def PrerunCheckSettings():
 #Function definition to set up default settings
 def SaverSettings():
     #Place to save the results to
-    FolderName = '/home/paul/Coding/PaulResults/PaulMPTResults/Results/'#'Default'
+    FolderName = '/home/paul/Coding/PaulResults/PaulMPTResults/Results/'
     #(string) This defines the folder (and potentially subfolders) the
     #data will be saved in (if "Default" then a predetermined the data
     #will be saved in a predetermined folder structure)

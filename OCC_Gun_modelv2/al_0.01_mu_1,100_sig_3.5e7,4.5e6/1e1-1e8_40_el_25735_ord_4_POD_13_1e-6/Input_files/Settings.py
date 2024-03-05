@@ -112,7 +112,7 @@ def SolverParameters():
     #(string) "bddc"/"local"
 
     #regularisation
-    epsi = 10**-10
+    epsi =10**-10
     #(float) regularisation to be used in the problem
 
     #Maximum iterations to be used in solving the problem
@@ -122,7 +122,7 @@ def SolverParameters():
     #the local will take more
 
     #Relative tolerance
-    Tolerance = 10**-8
+    Tolerance = 10**-9
     #(float) the amount the redsidual must decrease by relatively to solve
     #the problem
 

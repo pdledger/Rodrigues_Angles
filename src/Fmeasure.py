@@ -52,15 +52,22 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
         #    normalisationapprox-=2*(uI[j]*uR[j])/np.sqrt(3)
         #normalisationapprox+=((uI[1]*uR[0])+(uI[2]*uR[0])+(uI[0]*uR[1])+(uI[2]*uR[1])+(uI[0]*uR[2])+(uI[1]*uR[2]))/np.sqrt(3)
         evlist = np.zeros(3)
-        evlist[0]= -uI[1]*uR[1]-uI[2]*uR[2]+uI[2]*uR[1]+uI[1]*uR[2]
-        evlist[1]= -uI[0]*uR[0]-uI[2]*uR[2]+uI[2]*uR[0]+uI[0]*uR[2]
-        evlist[2]= -uI[1]*uR[1]-uI[0]*uR[0]+uI[1]*uR[0]+uI[0]*uR[1]
+        #evlist[0]= -uI[1]*uR[1]-uI[2]*uR[2]+uI[2]*uR[1]+uI[1]*uR[2]
+        #evlist[1]= -uI[0]*uR[0]-uI[2]*uR[2]+uI[2]*uR[0]+uI[0]*uR[2]
+        #evlist[2]= -uI[1]*uR[1]-uI[0]*uR[0]+uI[1]*uR[0]+uI[0]*uR[1]
+        evlist[0]= - (uI[1]-uI[2])*(uR[1]-uR[2])
+        evlist[1]= - (uI[0]-uI[2])*(uR[0]-uR[2])
+        evlist[2]= - (uI[0]-uI[1])*(uR[0]-uR[1])
+
 
         normalisation_min = np.min(evlist)
         normalisation_max = np.max(evlist)
+
         Fapproxconst_min[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_min)
         Fapproxconst_max[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_max)
-
+        #print(Frequencies[n],Fapproxconst_min[n],np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig),np.abs(normalisation_min))
+        #print(Frequencies[n],Fapproxconst_max[n],np.abs(normalisation_max))
+#
 #        Fapproxconst[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisationapprox)
 #    Fapproxconst= np.sqrt(Fapproxconst)
     Fapproxconst_min=np.sqrt(Fapproxconst_min)

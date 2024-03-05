@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 def EigenValueDecomposition(N0,TensorArray,Frequencies):
 
@@ -47,6 +48,21 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         MultIstore[n] = np.max(MultI)
         MultRtildestore[n] = np.max(MultRtilde)
 
+        # Check for reliablity of computed Eigenvalues
+        VR=checkreliable(uR,"R",VR)
+        VI=checkreliable(uI,"I",VI)
+        VRtilde=checkreliable(uRtilde,"Rtilde",VRtilde)
+
+
+
+        #print("Eigenvalues,Eignvectors")
+        #if n<4:
+        #    print(uR,uRtilde,uI)
+        #    print(VR)
+        #    print(VRtilde)
+        #    print(VI)
+        #    print(np.max(MultR),np.max(MultRtilde), np.max(MultI))
+        #    time.sleep(1)
 
 
         # Store eigenvalues and eigenvectors
@@ -99,3 +115,16 @@ def Reorder(u,V,Mult):
             #print(V)
             #print(Mult)
     return u,V,Mult
+
+def checkreliable(u,Tensor,V):
+    Perm = np.array([[0,1],[0,2],[1,2]])
+    Tol=1e-2
+    for n in range(3):
+        p=Perm[n,:]
+        diff=np.abs(u[p[0]]-u[p[1]])/np.sqrt(u[p[0]]**2+u[p[1]]**2)
+        if diff < Tol:
+            print("Eigenvalues closely spaced for",Tensor,diff,Tol)
+            print("Permutation",n)
+            V=np.eye(3)
+        #print(diff,Tensor)
+    return V

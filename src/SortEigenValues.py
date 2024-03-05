@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 from Rodrigues import *
 def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, Frequencies, sorteigenvalues):
@@ -86,6 +87,12 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
                 SortedQRstore[n,i,j] = QRopt[i,j]
                 SortedQIstore[n,i,j] = QIopt[i,j]
                 SortedKstore[n,i,j] = Kopt[i,j]
+        #print("Eigenvalues,Eignvectors")
+        #if n==0:
+        #    print(uRopt,uIopt)
+        #    print(QRopt)
+        #    print(QIopt)
+        #    time.sleep(1)
 
 
     return SortedMultRstore, SortedMultIstore, SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore
