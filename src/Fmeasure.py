@@ -62,9 +62,19 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
 
         normalisation_min = np.min(evlist)
         normalisation_max = np.max(evlist)
+        Tol=1e-5
+        if abs(normalisation_min/(np.linalg.norm(uI)*np.linalg.norm(uR))) > Tol**2:
+            Fapproxconst_min[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_min)
+        else:
+            print(normalisation_min/(np.linalg.norm(uI)*np.linalg.norm(uR)))
+            Fapproxconst_min[n] = 0
+        Tol=1e-5
+        if abs(normalisation_max/(np.linalg.norm(uI)*np.linalg.norm(uR))) > Tol**2:
+            Fapproxconst_max[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_max)
+        else:
+            print(normalisation_max/(np.linalg.norm(uI)*np.linalg.norm(uR)))
+            Fapproxconst_max[n] = 0
 
-        Fapproxconst_min[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_min)
-        Fapproxconst_max[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_max)
         #print(Frequencies[n],Fapproxconst_min[n],np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig),np.abs(normalisation_min))
         #print(Frequencies[n],Fapproxconst_max[n],np.abs(normalisation_max))
 #
