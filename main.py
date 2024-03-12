@@ -50,10 +50,10 @@ def main(directory,MaxOmega,Figures="On"):
     Frequencies = Frequencies[:Ntarget]
     N=Ntarget
 
-    Rstore,Istore,Rtildestore = SplitTensor(TensorArray,Frequencies,N0)
+    Rstore,Istore,Rtildestore, N0store = SplitTensor(TensorArray,Frequencies,N0)
 
     # Determine eigenvalue decompositions of N0, R, I, Rtilde (no sorting applied), and their multiplicities
-    MultRstore, MultIstore, MultRtildestore, URstore, UIstore, URtildestore, QRstore, QIstore, QRtildestore = EigenValueDecomposition(N0,TensorArray,Frequencies)
+    MultRstore, MultIstore, MultRtildestore, MultN0store, URstore, UIstore, URtildestore, UN0store, QRstore, QIstore, QRtildestore, QN0store = EigenValueDecomposition(N0,TensorArray,Frequencies)
 
     # Determine the maximal and minimal angles from QR and QI also output d_F metric for these orderings
     FixEvecs="Yes"
@@ -289,5 +289,115 @@ def main(directory,MaxOmega,Figures="On"):
         plt.show()
 
 
+    # Determine the maximal and minimal angles from QRtilde and QI also output d_F metric for these orderings
+    MinAnglestoreN0I, MaxAnglestoreN0I, dFMinAnglestoreN0I, dFMaxAnglestoreN0I = MinMaxthetafromQRQI(Frequencies,QN0store,QIstore,UN0store, UIstore,MultN0store,MultIstore,FixEvecs)
 
-    return RIResults,RtildeIResults
+    # Sort eigenvalues (and eigenvectors) so that || Lambda_Rtilde - Lambda_I || is maximal
+    sorteigenvalues="MaxDifference"
+    #SortedMultRstore, SortedMultIstore, SortedMultRtildestore, SortedURstore, SortedUIstore, SortedURtildestore, SortedQRstore, SortedQIstore, SortedQRtildestore = SortEigenValues(MultRstore, MultIstore, MultRtildestore, URstore, UIstore, URtildestore, QRstore, QIstore, QRtildestore, Frequencies)
+    SortedMultN0store, SortedMultIstore, SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore = SortEigenValues(MultN0store, MultIstore, UN0store, UIstore, QN0store, QIstore, Frequencies, sorteigenvalues)
+    # Obtain angles for this sorted min-max combination
+    AnglestoreN0Isortedmaxdiff = AnglesSortedQRQI(SortedQN0store,SortedQIstore,Frequencies)
+
+    #Obtain f meauses (approx and exact constant)
+    AnglestoreN0Ifmeasfullconstsortedmaxdiff, AnglestoreN0Ifmeasapprxconstsortedmaxdiff_min, AnglestoreN0Ifmeasapprxconstsortedmaxdiff_max = Fmeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
+
+    #Obtain Com meauses (approx and exact constant)
+    AnglestoreN0Icommeasfullconstsortedmaxdiff, AnglestoreN0Icommeasapprxconstsortedmaxdiff_min, AnglestoreN0Icommeasapprxconstsortedmaxdiff_max = Commeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
+
+
+    # Sort eigenvalues (and eigenvectors) so that || Lambda_R - Lambda_I || is minimal
+    sorteigenvalues="MinDifference"
+    SortedMultN0store, SortedMultIstore, SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore = SortEigenValues(MultN0store, MultIstore, UN0store, UIstore, QN0store, QIstore, Frequencies, sorteigenvalues)
+    # Obtain angles for this sorted min-max combination
+    AnglestoreN0Isortedmindiff = AnglesSortedQRQI(SortedQN0store,SortedQIstore,Frequencies)
+
+    #Obtain f meauses (approx and exact constant)
+    AnglestoreN0Ifmeasfullconstsortedmindiff, AnglestoreN0Ifmeasapprxconstsortedmindiff_min,AnglestoreN0Ifmeasapprxconstsortedmindiff_max = Fmeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
+
+    #Obtain com meauses (approx and exact constant)
+    AnglestoreN0Icommeasfullconstsortedmindiff, AnglestoreN0Icommeasapprxconstsortedmindiff_min,AnglestoreN0Icommeasapprxconstsortedmindiff_max = Commeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
+
+
+    if Figures=="On":
+        fig=plt.figure()
+        plt.semilogx(Frequencies,MinAnglestoreN0I,label=r'$d_R({\cal N}^{(0)},{\cal I})$')
+        plt.semilogx(Frequencies,dFMinAnglestoreN0I,label=r'$d_F({\cal N}^{(0)},{\cal I})$')
+        plt.semilogx(Frequencies,np.fmin(AnglestoreN0Ifmeasapprxconstsortedmaxdiff_max,AnglestoreN0Ifmeasapprxconstsortedmindiff_min),'x',label=r'Approx $d_R( {\cal N}^{(0)},{\cal I})$ from  $d_E( {\cal N}^{(0)},{\cal I})$ ')
+        plt.semilogx(Frequencies,np.fmin(AnglestoreN0Icommeasapprxconstsortedmaxdiff_max,AnglestoreN0Icommeasapprxconstsortedmindiff_min),'x',label=r'Approx $d_R( {\cal N}^{(0)},{\cal I})$ from  $d_C( {\cal N}^{(0)},{\cal I})$ ')
+        plt.xlabel(r'$\omega$ [rad/s]')
+        plt.ylabel(r'$\theta$ [rad]')
+        plt.legend()
+        plt.show()
+
+    N0IResults={"Frequencies": Frequencies, "MinAnglestoreN0I": MinAnglestoreN0I, "AnglestoreN0Ifmeasapprxconstsortedmaxdiff_max": AnglestoreN0Ifmeasapprxconstsortedmaxdiff_max, \
+        "AnglestoreN0Ifmeasapprxconstsortedmindiff_min": AnglestoreN0Ifmeasapprxconstsortedmindiff_min,"dFMinAnglestoreN0I":dFMinAnglestoreN0I, "dFMaxAnglestoreN0I": dFMaxAnglestoreN0I,\
+        "AnglestoreN0Icommeasapprxconstsortedmaxdiff_max":AnglestoreN0Icommeasapprxconstsortedmaxdiff_max,"AnglestoreN0Icommeasapprxconstsortedmindiff_min":AnglestoreN0Icommeasapprxconstsortedmindiff_min}
+
+
+    # Plots of minimal and maximal angles and compare with MaxDifference and MinDifference
+    if Figures=="On":
+        fig=plt.figure()
+        ax1 = fig.add_subplot(111)
+        ax1.semilogx(Frequencies,MinAnglestoreN0I,label=r'$\theta_{min}$')
+        ax1.semilogx(Frequencies,AnglestoreN0Isortedmaxdiff,label=r'$\theta_{max perm}$')
+        ax1.semilogx(Frequencies,AnglestoreN0Ifmeasfullconstsortedmaxdiff,label=r'$\theta_{f, max perm, exact C}$')
+    #ax1.semilogx(Frequencies,AnglestoreRtildeIfmeasapprxconstsortedmaxdiff,'x',label=r'$\theta_{f, max perm, approx C}$')
+    #ax1.semilogx(Frequencies,AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_min,'x',label=r'$\theta_{f, max perm, approx C^-}$')
+        ax1.semilogx(Frequencies,AnglestoreN0Ifmeasapprxconstsortedmaxdiff_max,'x',label=r'$\theta_{f, max perm, approx C^+}$')
+
+        ax1.set_xlabel(r'$\omega [rad/s]$')
+        ax1.set_ylabel(r'$\theta$ [rad]')
+    #ax1.set_title(r'Comparison of $\theta_{min} = \min \theta(Q_\tilde{R},Q_I)$  and $\theta_{max perm} = \theta(Q_\tilde{R},Q_{I,max perm})$')
+        ax1.semilogx(Frequencies,MaxAnglestoreN0I,label=r'$\theta_{max}$')
+        ax1.semilogx(Frequencies,AnglestoreN0Isortedmindiff,label=r'$\theta_{min perm}$')
+        ax1.semilogx(Frequencies,AnglestoreN0Ifmeasfullconstsortedmindiff,label=r'$\theta_{f, min perm, exact C}$')
+    #ax1.semilogx(Frequencies,AnglestoreRtildeIfmeasapprxconstsortedmindiff,'x',label=r'$\theta_{f, min perm, approx C}$')
+        ax1.semilogx(Frequencies,AnglestoreN0Ifmeasapprxconstsortedmindiff_min,'x',label=r'$\theta_{f, min perm, approx C^-}$')
+    #ax1.semilogx(Frequencies,AnglestoreRtildeIfmeasapprxconstsortedmindiff_max,'x',label=r'$\theta_{f, min perm, approx C^+}$')
+
+        ax1.set_title(r'Comparison of $\theta = \theta(Q_{N},Q_I)$, $\theta_{max perm} = \theta(Q_{N},Q_{I,max perm})$, $\theta_{min perm} = \theta(Q_{N},Q_{I,min perm})$ and f measures')
+
+
+    #ax2.set_xlabel(r'$\omega [rad/s]$')
+    #ax2.set_ylabel(r'$\theta$ [rad]')
+    #ax2.set_title(r'Comparison of $\theta_{max} = \max \theta(Q_\tilde{R},Q_I)$  and $\theta_{min perm} = \theta(Q_\tilde{R},Q_{I,min perm})$')
+        ax1.legend()
+    #ax2.legend()
+        fig.tight_layout()
+        plt.show()
+
+        fig=plt.figure()
+        ax1 = fig.add_subplot(211)
+        ax1.semilogx(Frequencies,AnglestoreN0Isortedmaxdiff,label=r'$\theta_{max perm}$')
+        ax1.semilogx(Frequencies,AnglestoreN0Ifmeasfullconstsortedmaxdiff,label=r'$\theta_{f, max perm, exact C}$')
+    #ax1.semilogx(Frequencies,AnglestoreRtildeIfmeasapprxconstsortedmaxdiff,'x',label=r'$\theta_{f, max perm, approx C}$')
+    #ax1.semilogx(Frequencies,AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_min,'x',label=r'$\theta_{f, max perm, approx C^-}$')
+        ax1.semilogx(Frequencies,AnglestoreN0Ifmeasapprxconstsortedmaxdiff_max,'x',label=r'$\theta_{f, max perm, approx C^+}$')
+        ax1.semilogx(Frequencies,np.fmin(AnglestoreN0Icommeasapprxconstsortedmaxdiff_max,AnglestoreN0Icommeasapprxconstsortedmindiff_min),'x',label=r'Approx $d_R({\cal N}^{(0)},{\cal I})$ from  $d_C({\cal N}^{(0)},{\cal I})$ ')
+
+
+        ax1.set_xlabel(r'$\omega [rad/s]$')
+        ax1.set_ylabel(r'$\theta$ [rad]')
+        ax1.set_title(r'Comparison of $\theta_{min} = \theta_{max perm} = \theta(Q_{N},Q_{I,max perm})$ and $f$ measures')
+        ax2 = fig.add_subplot(212)
+        ax2.semilogx(Frequencies,AnglestoreN0Isortedmindiff,label=r'$\theta_{min perm}$')
+        ax2.semilogx(Frequencies,AnglestoreN0Ifmeasfullconstsortedmindiff,label=r'$\theta_{f, min perm, exact C}$')
+
+    #ax2.semilogx(Frequencies,AnglestoreRtildeIfmeasapprxconstsortedmindiff,'x',label=r'$\theta_{f, min perm, approx C}$')
+        ax2.semilogx(Frequencies,AnglestoreN0Ifmeasapprxconstsortedmindiff_min,'x',label=r'$\theta_{f, min perm, approx C^-}$')
+        ax2.semilogx(Frequencies,np.fmax(AnglestoreN0Icommeasapprxconstsortedmaxdiff_max,AnglestoreN0Icommeasapprxconstsortedmindiff_min),'x',label=r'Approx $d_R({\cal N}^{(0)},{\cal I})$ from  $d_C({\cal N}^{(0)},{\cal I})$ ')
+
+    #ax2.semilogx(Frequencies,AnglestoreRtildeIfmeasapprxconstsortedmindiff_max,'x',label=r'$\theta_{f, min perm, approx C^+}$')
+
+        ax2.set_xlabel(r'$\omega [rad/s]$')
+        ax2.set_ylabel(r'$\theta$ [rad]')
+        ax2.set_title(r'Comparison of $\theta_{max} = \max \theta(Q_{N},Q_I)$ and $f$ measures')
+        ax1.legend()
+        ax2.legend()
+        fig.tight_layout()
+        plt.show()
+
+
+
+    return RIResults,RtildeIResults,N0IResults

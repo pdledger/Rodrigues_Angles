@@ -6,6 +6,8 @@ def SplitTensor(TensorArray,Frequencies,N0):
     Rstore = np.zeros((N,3,3))
     Istore = np.zeros((N,3,3))
     Rtildestore = np.zeros((N,3,3))
+    N0store = np.zeros((N,3,3))
+
     for n in range(N):
         Mlist = TensorArray[n,:]
         Mten = np.array([[Mlist[0], Mlist[1], Mlist[2]],[Mlist[3], Mlist[4], Mlist[5]],[Mlist[6], Mlist[7], Mlist[8]]])
@@ -17,5 +19,7 @@ def SplitTensor(TensorArray,Frequencies,N0):
                 Rstore[n,i,j]=R[i,j]
                 Istore[n,i,j]=I[i,j]
                 Rtildestore[n,i,j]=Rtilde[i,j]
+                N0store[n,i,j]=N0[i,j]
 
-    return Rstore,Istore,Rtildestore
+
+    return Rstore,Istore,Rtildestore, N0store
