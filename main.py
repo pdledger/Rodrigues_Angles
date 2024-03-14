@@ -331,8 +331,12 @@ def main(directory,MaxOmega,Figures="On"):
         plt.show()
 
     N0IResults={"Frequencies": Frequencies, "MinAnglestoreN0I": MinAnglestoreN0I, "AnglestoreN0Ifmeasapprxconstsortedmaxdiff_max": AnglestoreN0Ifmeasapprxconstsortedmaxdiff_max, \
-        "AnglestoreN0Ifmeasapprxconstsortedmindiff_min": AnglestoreN0Ifmeasapprxconstsortedmindiff_min,"dFMinAnglestoreN0I":dFMinAnglestoreN0I, "dFMaxAnglestoreN0I": dFMaxAnglestoreN0I,\
-        "AnglestoreN0Icommeasapprxconstsortedmaxdiff_max":AnglestoreN0Icommeasapprxconstsortedmaxdiff_max,"AnglestoreN0Icommeasapprxconstsortedmindiff_min":AnglestoreN0Icommeasapprxconstsortedmindiff_min}
+        "AnglestoreN0Ifmeasapprxconstsortedmindiff_min": AnglestoreN0Ifmeasapprxconstsortedmindiff_min,"AnglestoreN0Ifmeasapprxconstsortedmaxdiff_min":AnglestoreN0Ifmeasapprxconstsortedmaxdiff_min,\
+        "AnglestoreN0Ifmeasapprxconstsortedmindiff_max": AnglestoreN0Ifmeasapprxconstsortedmindiff_max,\
+        "dFMinAnglestoreN0I":dFMinAnglestoreN0I, "dFMaxAnglestoreN0I": dFMaxAnglestoreN0I,\
+        "AnglestoreN0Icommeasapprxconstsortedmaxdiff_max":AnglestoreN0Icommeasapprxconstsortedmaxdiff_max,"AnglestoreN0Icommeasapprxconstsortedmindiff_min":AnglestoreN0Icommeasapprxconstsortedmindiff_min,\
+        "AnglestoreN0Icommeasapprxconstsortedmaxdiff_min":AnglestoreN0Icommeasapprxconstsortedmaxdiff_min,"AnglestoreN0Icommeasapprxconstsortedmindiff_max":AnglestoreN0Icommeasapprxconstsortedmindiff_max}
+
 
 
     # Plots of minimal and maximal angles and compare with MaxDifference and MinDifference
