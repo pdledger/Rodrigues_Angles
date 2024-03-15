@@ -67,7 +67,7 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
                     QR[:,0] = - QR[:,0]
                 QR[:,1:3] = QI[:,1:3]
             else:
-                QR, QI, uR = CheckOrdering(QR,QI,uR,0)
+                QR, QI, uR, uI = CheckOrdering(QR,QI,uR,uI,0)
             #min_angle=np.arccos(QR[:,0]@QI[:,0])
             #K=np.zeros((3,3))
             #K[1,2]=-1
@@ -87,17 +87,17 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
                     QR[:,0] = - QR[:,0]
                 QR[:,1:3] = QI[:,1:3]
             else:
-                QR, QI, uR = CheckOrdering(QR,QI,uR,1)
+                QR, QI, uR, uI = CheckOrdering(QR,QI,uR,uI,1)
             max_angle, K, tvec = Rodrigues(QR,QI)
             dF_max = dFmetric(QR,QI)
 
 
         if Rmult==1:
             # Find the combinations of QR and QI that lead to a minimal angle
-            QR, QI, uR = CheckOrdering(QR,QI,uR,0)
+            QR, QI, uR, uI = CheckOrdering(QR,QI,uR,uI,0)
             min_angle, K, tvec = Rodrigues(QR,QI)
             dF_min = dFmetric(QR,QI)
-            QR, QI, uR = CheckOrdering(QR,QI,uR,1)
+            QR, QI, uR, uI = CheckOrdering(QR,QI,uR,uI,1)
             max_angle, K, tvec = Rodrigues(QR,QI)
             dF_max = dFmetric(QR,QI)
 
@@ -105,6 +105,13 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
         MaxAnglestore[n] = max_angle
         dFMinAnglestoreRI[n] = dF_min
         dFMaxAnglestoreRI[n] = dF_max
+        if n > 5 and n < 8:
+            print(n,Rmult)
+            print(uR,uI)
+            print(QR,QI)
+            print(min_angle,max_angle)
+            print(dF_min,dF_max)
+
 
 
 

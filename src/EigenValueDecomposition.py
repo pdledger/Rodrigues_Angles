@@ -42,6 +42,13 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         MultN0 = CheckMult(uN0,N0)
 
 
+        if n > 5 and n < 8:
+            print(n)
+            print("R",uR,VR,MultR)
+            print("Rtilde",uRtilde,VRtilde,MultRtilde)
+            print("I",uI,VI,MultI)
+
+
         MultRstore[n] = MultR
         MultIstore[n] = MultI
         MultRtildestore[n] = MultRtilde
@@ -66,9 +73,20 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
 
 def CheckMult(u,Tensor):
     # Dynamically adjust tolerance
-    Tol=1e-4*np.min(np.abs(u))
-    mult=0
-    # Determine the multplicity of eigenvalue lambda_i as 3 - rank(R -lambda_i eye(3))
+#    Tol=1e-4*np.min(np.abs(u))
+#    mult=0
+#    # Determine the multplicity of eigenvalue lambda_i as 3 - rank(R -lambda_i eye(3))
+#    for i in range(3):
+#        mult=np.max([mult,3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol)])
+#
+    Tol=5e-3
+    mult=1
     for i in range(3):
-        mult=np.max([mult,3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol)])
+        for j in range(i+1,3):
+            if i != j:
+                if np.abs(u[i]-u[j])/abs(u[i]) < Tol:
+                    mult=mult+1
+                    if mult > 3:
+                        mult =3
+
     return mult
