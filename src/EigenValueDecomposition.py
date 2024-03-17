@@ -79,7 +79,7 @@ def CheckMult(u,Tensor):
 #    for i in range(3):
 #        mult=np.max([mult,3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol)])
 #
-    Tol=5e-3
+    Tol=5e-4
     mult=1
     for i in range(3):
         for j in range(i+1,3):

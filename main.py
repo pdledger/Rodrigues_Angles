@@ -37,6 +37,7 @@ def main(directory,MaxOmega,Figures="On"):
 
     # Limit the values up to a perscribed MaxOmega
     N=len(Frequencies)
+    Ntarget=N
     for n in range(N):
         if Frequencies[n] > MaxOmega:
             Ntarget=n
@@ -44,7 +45,7 @@ def main(directory,MaxOmega,Figures="On"):
 
     # allow for frequency array less than max omega.
     if MaxOmega > np.max(Frequencies):
-        Ntarget = -1
+        Ntarget = N
 
     TensorArray = TensorArray[:Ntarget,:]
     Frequencies = Frequencies[:Ntarget]
