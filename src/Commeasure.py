@@ -5,6 +5,7 @@ def Commeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sort
     #Fapproxconst = np.zeros(N)
     Comapproxconst_min = np.zeros(N)
     Comapproxconst_max = np.zeros(N)
+    den_const= np.zeros(N)
     # First compute Commutator measure using the exact constant
     for n in range(N):
         QR = np.zeros((3,3))
@@ -65,10 +66,12 @@ def Commeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sort
         normalisation_max = np.max(evlist)
         Comapproxconst_min[n] = np.abs(np.linalg.norm(Z,ord='fro')**2 ) / np.abs(normalisation_min)
         Comapproxconst_max[n] = np.abs(np.linalg.norm(Z,ord='fro')**2 ) / np.abs(normalisation_max)
-
+        den_const[n]=np.min([np.sqrt(np.abs(normalisation_min)),np.sqrt(np.abs(normalisation_max))])
 #        Fapproxconst[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisationapprox)
 #    Fapproxconst= np.sqrt(Fapproxconst)
     Comapproxconst_min=np.sqrt(Comapproxconst_min)
     Comapproxconst_max=np.sqrt(Comapproxconst_max)
 
-    return Comexactconst,Comapproxconst_min,Comapproxconst_max
+
+
+    return Comexactconst,Comapproxconst_min,Comapproxconst_max, den_const

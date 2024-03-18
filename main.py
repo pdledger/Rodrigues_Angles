@@ -71,10 +71,10 @@ def main(directory,MaxOmega,Figures="On"):
 
     #Obtain f meauses (approx and exact constant)
     #AnglestoreRIfmeasfullconstsortedmaxdiff, AnglestoreRIfmeasapprxconstsortedmaxdiff = Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
-    AnglestoreRIfmeasfullconstsortedmaxdiff, AnglestoreRIfmeasapprxconstsortedmaxdiff_min,AnglestoreRIfmeasapprxconstsortedmaxdiff_max = Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
+    AnglestoreRIfmeasfullconstsortedmaxdiff, AnglestoreRIfmeasapprxconstsortedmaxdiff_min,AnglestoreRIfmeasapprxconstsortedmaxdiff_max, RIfmeasapprx_den_const_max = Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
 
     #Obtain Com-meauses (approx and exact constant)
-    AnglestoreRIcommeasfullconstsortedmaxdiff, AnglestoreRIcommeasapprxconstsortedmaxdiff_min,AnglestoreRIcommeasapprxconstsortedmaxdiff_max = Commeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
+    AnglestoreRIcommeasfullconstsortedmaxdiff, AnglestoreRIcommeasapprxconstsortedmaxdiff_min,AnglestoreRIcommeasapprxconstsortedmaxdiff_max, RIcommeapprx_den_const_max = Commeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
 
 
     # Sort eigenvalues (and eigenvectors) so that || Lambda_R - Lambda_I || is minimal
@@ -86,10 +86,10 @@ def main(directory,MaxOmega,Figures="On"):
 
     #Obtain f meauses (approx and exact constant)
     #AnglestoreRIfmeasfullconstsortedmindiff, AnglestoreRIfmeasapprxconstsortedmindiff = Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
-    AnglestoreRIfmeasfullconstsortedmindiff, AnglestoreRIfmeasapprxconstsortedmindiff_min, AnglestoreRIfmeasapprxconstsortedmindiff_max = Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
+    AnglestoreRIfmeasfullconstsortedmindiff, AnglestoreRIfmeasapprxconstsortedmindiff_min, AnglestoreRIfmeasapprxconstsortedmindiff_max, RIfmeasapprx_den_const_min = Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
 
     #Obtain Com-meauses (approx and exact constant)
-    AnglestoreRIcommeasfullconstsortedmindiff, AnglestoreRIcommeasapprxconstsortedmindiff_min,AnglestoreRIcommeasapprxconstsortedmindiff_max = Commeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
+    AnglestoreRIcommeasfullconstsortedmindiff, AnglestoreRIcommeasapprxconstsortedmindiff_min,AnglestoreRIcommeasapprxconstsortedmindiff_max, RIcommeapprx_den_const_min = Commeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
 
 
     if Figures=="On":
@@ -109,7 +109,9 @@ def main(directory,MaxOmega,Figures="On"):
         "AnglestoreRIfmeasapprxconstsortedmindiff_max": AnglestoreRIfmeasapprxconstsortedmindiff_max,
         "dFMinAnglestoreRI":dFMinAnglestoreRI, "dFMaxAnglestoreRI": dFMaxAnglestoreRI,
         "AnglestoreRIcommeasapprxconstsortedmaxdiff_max":AnglestoreRIcommeasapprxconstsortedmaxdiff_max,"AnglestoreRIcommeasapprxconstsortedmindiff_min":AnglestoreRIcommeasapprxconstsortedmindiff_min,\
-        "AnglestoreRIcommeasapprxconstsortedmaxdiff_min":AnglestoreRIcommeasapprxconstsortedmaxdiff_min,"AnglestoreRIcommeasapprxconstsortedmindiff_max":AnglestoreRIcommeasapprxconstsortedmindiff_max}
+        "AnglestoreRIcommeasapprxconstsortedmaxdiff_min":AnglestoreRIcommeasapprxconstsortedmaxdiff_min,"AnglestoreRIcommeasapprxconstsortedmindiff_max":AnglestoreRIcommeasapprxconstsortedmindiff_max, \
+        "RIfmeasapprx_den_const_max": RIfmeasapprx_den_const_max, "RIfmeasapprx_den_const_min": RIfmeasapprx_den_const_min, \
+        "RIcommeapprx_den_const_max":RIcommeapprx_den_const_max, "RIcommeapprx_den_const_min": RIcommeapprx_den_const_min}
 
     # Plots of minimal and maximal angles and compare with MaxDifference and MinDifference
     if Figures=="On":
@@ -183,10 +185,10 @@ def main(directory,MaxOmega,Figures="On"):
     #Obtain f meauses (approx and exact constant)
     #AnglestoreRtildeIfmeasfullconstsortedmaxdiff, AnglestoreRtildeIfmeasapprxconstsortedmaxdiff = Fmeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
     print('Computing F measure Tilde')
-    AnglestoreRtildeIfmeasfullconstsortedmaxdiff, AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_min, AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_max = Fmeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
+    AnglestoreRtildeIfmeasfullconstsortedmaxdiff, AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_min, AnglestoreRtildeIfmeasapprxconstsortedmaxdiff_max, RtildeIfmeasapprx_den_const_max = Fmeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
 
     #Obtain Com meauses (approx and exact constant)
-    AnglestoreRtildeIcommeasfullconstsortedmaxdiff, AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_min, AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_max = Commeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
+    AnglestoreRtildeIcommeasfullconstsortedmaxdiff, AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_min, AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_max, RtildeIcommeapprx_den_const_max = Commeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
 
 
     # Sort eigenvalues (and eigenvectors) so that || Lambda_R - Lambda_I || is minimal
@@ -198,11 +200,11 @@ def main(directory,MaxOmega,Figures="On"):
 
     #Obtain f meauses (approx and exact constant)
     #AnglestoreRtildeIfmeasfullconstsortedmindiff, AnglestoreRtildeIfmeasapprxconstsortedmindiff = Fmeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
-    AnglestoreRtildeIfmeasfullconstsortedmindiff, AnglestoreRtildeIfmeasapprxconstsortedmindiff_min,AnglestoreRtildeIfmeasapprxconstsortedmindiff_max = Fmeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
+    AnglestoreRtildeIfmeasfullconstsortedmindiff, AnglestoreRtildeIfmeasapprxconstsortedmindiff_min,AnglestoreRtildeIfmeasapprxconstsortedmindiff_max, RtildeIfmeasapprx_den_const_min = Fmeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
 
     #Obtain com meauses (approx and exact constant)
     #AnglestoreRtildeIfmeasfullconstsortedmindiff, AnglestoreRtildeIfmeasapprxconstsortedmindiff = Fmeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
-    AnglestoreRtildeIcommeasfullconstsortedmindiff, AnglestoreRtildeIcommeasapprxconstsortedmindiff_min,AnglestoreRtildeIcommeasapprxconstsortedmindiff_max = Commeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
+    AnglestoreRtildeIcommeasfullconstsortedmindiff, AnglestoreRtildeIcommeasapprxconstsortedmindiff_min,AnglestoreRtildeIcommeasapprxconstsortedmindiff_max, RtildeIcommeapprx_den_const_min = Commeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
 
 
     if Figures=="On":
@@ -223,7 +225,9 @@ def main(directory,MaxOmega,Figures="On"):
         "AnglestoreRtildeIfmeasfullconstsortedmaxdiff": AnglestoreRtildeIfmeasfullconstsortedmaxdiff,\
         "dFMinAnglestoreRtildeI":dFMinAnglestoreRtildeI, "dFMaxAnglestoreRtildeI": dFMaxAnglestoreRtildeI,\
         "AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_max":AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_max,"AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_min":AnglestoreRtildeIcommeasapprxconstsortedmaxdiff_min,\
-        "AnglestoreRtildeIcommeasapprxconstsortedmindiff_min":AnglestoreRtildeIcommeasapprxconstsortedmindiff_min, "AnglestoreRtildeIcommeasapprxconstsortedmindiff_max":AnglestoreRtildeIcommeasapprxconstsortedmindiff_max}
+        "AnglestoreRtildeIcommeasapprxconstsortedmindiff_min":AnglestoreRtildeIcommeasapprxconstsortedmindiff_min, "AnglestoreRtildeIcommeasapprxconstsortedmindiff_max":AnglestoreRtildeIcommeasapprxconstsortedmindiff_max, \
+        "RtildeIfmeasapprx_den_const_max": RtildeIfmeasapprx_den_const_max, "RtildeIfmeasapprx_den_const_min": RtildeIfmeasapprx_den_const_min,
+        "RtildeIcommeapprx_den_const_max":RtildeIcommeapprx_den_const_max, "RtildeIcommeapprx_den_const_min": RtildeIcommeapprx_den_const_min}
 
 
     # Plots of minimal and maximal angles and compare with MaxDifference and MinDifference
@@ -301,10 +305,10 @@ def main(directory,MaxOmega,Figures="On"):
     AnglestoreN0Isortedmaxdiff = AnglesSortedQRQI(SortedQN0store,SortedQIstore,Frequencies)
 
     #Obtain f meauses (approx and exact constant)
-    AnglestoreN0Ifmeasfullconstsortedmaxdiff, AnglestoreN0Ifmeasapprxconstsortedmaxdiff_min, AnglestoreN0Ifmeasapprxconstsortedmaxdiff_max = Fmeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
+    AnglestoreN0Ifmeasfullconstsortedmaxdiff, AnglestoreN0Ifmeasapprxconstsortedmaxdiff_min, AnglestoreN0Ifmeasapprxconstsortedmaxdiff_max, N0Ifmeasapprx_den_const_max = Fmeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
 
     #Obtain Com meauses (approx and exact constant)
-    AnglestoreN0Icommeasfullconstsortedmaxdiff, AnglestoreN0Icommeasapprxconstsortedmaxdiff_min, AnglestoreN0Icommeasapprxconstsortedmaxdiff_max = Commeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
+    AnglestoreN0Icommeasfullconstsortedmaxdiff, AnglestoreN0Icommeasapprxconstsortedmaxdiff_min, AnglestoreN0Icommeasapprxconstsortedmaxdiff_max, N0Icommeapprx_den_const_max = Commeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
 
 
     # Sort eigenvalues (and eigenvectors) so that || Lambda_R - Lambda_I || is minimal
@@ -314,10 +318,10 @@ def main(directory,MaxOmega,Figures="On"):
     AnglestoreN0Isortedmindiff = AnglesSortedQRQI(SortedQN0store,SortedQIstore,Frequencies)
 
     #Obtain f meauses (approx and exact constant)
-    AnglestoreN0Ifmeasfullconstsortedmindiff, AnglestoreN0Ifmeasapprxconstsortedmindiff_min,AnglestoreN0Ifmeasapprxconstsortedmindiff_max = Fmeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
+    AnglestoreN0Ifmeasfullconstsortedmindiff, AnglestoreN0Ifmeasapprxconstsortedmindiff_min,AnglestoreN0Ifmeasapprxconstsortedmindiff_max, N0Ifmeasapprx_den_const_min = Fmeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
 
     #Obtain com meauses (approx and exact constant)
-    AnglestoreN0Icommeasfullconstsortedmindiff, AnglestoreN0Icommeasapprxconstsortedmindiff_min,AnglestoreN0Icommeasapprxconstsortedmindiff_max = Commeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
+    AnglestoreN0Icommeasfullconstsortedmindiff, AnglestoreN0Icommeasapprxconstsortedmindiff_min,AnglestoreN0Icommeasapprxconstsortedmindiff_max, N0Icommeapprx_den_const_min= Commeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
 
 
     if Figures=="On":
@@ -336,7 +340,9 @@ def main(directory,MaxOmega,Figures="On"):
         "AnglestoreN0Ifmeasapprxconstsortedmindiff_max": AnglestoreN0Ifmeasapprxconstsortedmindiff_max,\
         "dFMinAnglestoreN0I":dFMinAnglestoreN0I, "dFMaxAnglestoreN0I": dFMaxAnglestoreN0I,\
         "AnglestoreN0Icommeasapprxconstsortedmaxdiff_max":AnglestoreN0Icommeasapprxconstsortedmaxdiff_max,"AnglestoreN0Icommeasapprxconstsortedmindiff_min":AnglestoreN0Icommeasapprxconstsortedmindiff_min,\
-        "AnglestoreN0Icommeasapprxconstsortedmaxdiff_min":AnglestoreN0Icommeasapprxconstsortedmaxdiff_min,"AnglestoreN0Icommeasapprxconstsortedmindiff_max":AnglestoreN0Icommeasapprxconstsortedmindiff_max}
+        "AnglestoreN0Icommeasapprxconstsortedmaxdiff_min":AnglestoreN0Icommeasapprxconstsortedmaxdiff_min,"AnglestoreN0Icommeasapprxconstsortedmindiff_max":AnglestoreN0Icommeasapprxconstsortedmindiff_max,\
+        "N0Ifmeasapprx_den_const_max": N0Ifmeasapprx_den_const_max, "N0Ifmeasapprx_den_const_min": N0Ifmeasapprx_den_const_min,\
+        "N0Icommeapprx_den_const_max": N0Icommeapprx_den_const_max, "N0Icommeapprx_den_const_min": N0Icommeapprx_den_const_min}
 
 
 

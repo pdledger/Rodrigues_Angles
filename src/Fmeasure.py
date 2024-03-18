@@ -5,6 +5,7 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
     #Fapproxconst = np.zeros(N)
     Fapproxconst_min = np.zeros(N)
     Fapproxconst_max = np.zeros(N)
+    den_const=np.zeros(N)
     # First compute F using the exact constant
     for n in range(N):
         QR = np.zeros((3,3))
@@ -74,7 +75,7 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
         else:
             print(normalisation_max/(np.linalg.norm(uI)*np.linalg.norm(uR)))
             Fapproxconst_max[n] = 0
-
+        den_const[n]=np.min([np.sqrt(np.abs(normalisation_min)),np.sqrt(np.abs(normalisation_max))])
         #print(Frequencies[n],Fapproxconst_min[n],np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig),np.abs(normalisation_min))
         #print(Frequencies[n],Fapproxconst_max[n],np.abs(normalisation_max))
 #
@@ -83,5 +84,6 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
     Fapproxconst_min=np.sqrt(Fapproxconst_min)
     Fapproxconst_max=np.sqrt(Fapproxconst_max)
 
-    return Fexactconst,Fapproxconst_min,Fapproxconst_max
+
+    return Fexactconst,Fapproxconst_min,Fapproxconst_max,den_const
     #Fapproxconst
