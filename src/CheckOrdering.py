@@ -23,7 +23,7 @@ def CheckOrdering(QR,QI,uR,uI,minmax):
                     [-1,1,-1],[-1,1,-1],[-1,1,-1],[-1,1,-1],[-1,1,-1],[-1,1,-1],[-1,1,-1], \
                     [1,-1,-1],[1,-1,-1],[1,-1,-1],[1,-1,-1],[1,-1,-1],[1,-1,-1],[1,-1,-1], \
                     [1,-1,1],[1,-1,1],[1,-1,1],[1,-1,1],[1,-1,1],[1,-1,1],[1,-1,1], \
-                    [1,1,-1],[1,1,-1],[1,1,-1],[1,1,-1],[1,1,-1],[1,1,-1],[1,1,-1]])
+                    [1,1,-1],[1,1,-1],[1,1,-1],[1,1,-1],[1,1,-1],[1,1,-1],[1,1,-1]], dtype=np.longdouble)
 
     if minmax==0:
         theta=1e2
@@ -55,7 +55,7 @@ def CheckOrdering(QR,QI,uR,uI,minmax):
                 QI[:,i]=signs[m,i]*QI[:,i]
 
             Q = np.transpose(QR)@QI
-            Q = Q /np.linalg.norm(Q,ord=2)
+            Q = Q /np.linalg.norm(Q.astype(dtype=float),ord=2)
             tol=0.01
             if np.linalg.det(Q)> 0:
                 #LogQ = scipy.linalg.logm(Q)

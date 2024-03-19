@@ -3,18 +3,18 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
     N=len(Frequencies)
     Fexactconst = np.zeros(N)
     #Fapproxconst = np.zeros(N)
-    Fapproxconst_min = np.zeros(N)
-    Fapproxconst_max = np.zeros(N)
+    Fapproxconst_min = np.zeros(N, dtype=np.longdouble)
+    Fapproxconst_max = np.zeros(N, dtype=np.longdouble)
     den_const=np.zeros(N)
     # First compute F using the exact constant
     for n in range(N):
-        QR = np.zeros((3,3))
-        QI = np.zeros((3,3))
-        R=np.zeros((3,3))
-        I=np.zeros((3,3))
-        uR = np.zeros(3)
-        uI = np.zeros(3)
-        K = np.zeros((3,3))
+        QR = np.zeros((3,3), dtype=np.longdouble )
+        QI = np.zeros((3,3), dtype=np.longdouble)
+        R=np.zeros((3,3), dtype=np.longdouble)
+        I=np.zeros((3,3), dtype=np.longdouble)
+        uR = np.zeros(3, dtype=np.longdouble)
+        uI = np.zeros(3, dtype=np.longdouble)
+        K = np.zeros((3,3), dtype=np.longdouble)
         for i in range(3):
             uR[i] = SortedURstore[n,i]
             uI[i] = SortedUIstore[n,i]
@@ -34,10 +34,10 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
 
     # Next compute F using the apprx constant without K, QR or QI
     for n in range(N):
-        R=np.zeros((3,3))
-        I=np.zeros((3,3))
-        uR = np.zeros(3)
-        uI = np.zeros(3)
+        R=np.zeros((3,3), dtype=np.longdouble)
+        I=np.zeros((3,3), dtype=np.longdouble)
+        uR = np.zeros(3, dtype=np.longdouble)
+        uI = np.zeros(3, dtype=np.longdouble)
         for i in range(3):
             uR[i] = SortedURstore[n,i]
             uI[i] = SortedUIstore[n,i]
@@ -45,6 +45,7 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
                 R[i,j] = Rstore[n,i,j]
                 I[i,j] = Istore[n,i,j]
         diffeig=0.
+        print(Frequencies[n],uR,uI)
         for i in range(3):
             diffeig+=np.abs(uR[i]-uI[i])**2
 
@@ -52,7 +53,7 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
         #for j in range(3):
         #    normalisationapprox-=2*(uI[j]*uR[j])/np.sqrt(3)
         #normalisationapprox+=((uI[1]*uR[0])+(uI[2]*uR[0])+(uI[0]*uR[1])+(uI[2]*uR[1])+(uI[0]*uR[2])+(uI[1]*uR[2]))/np.sqrt(3)
-        evlist = np.zeros(3)
+        evlist = np.zeros(3, dtype=np.longdouble)
         #evlist[0]= -uI[1]*uR[1]-uI[2]*uR[2]+uI[2]*uR[1]+uI[1]*uR[2]
         #evlist[1]= -uI[0]*uR[0]-uI[2]*uR[2]+uI[2]*uR[0]+uI[0]*uR[2]
         #evlist[2]= -uI[1]*uR[1]-uI[0]*uR[0]+uI[1]*uR[0]+uI[0]*uR[1]

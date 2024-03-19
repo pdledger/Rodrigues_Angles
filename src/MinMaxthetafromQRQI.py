@@ -11,17 +11,17 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
     # For each freuqncy use multiplicties to determine method for
     # obtaining angles
     N = len(Frequencies)
-    MinAnglestore = np.zeros(N)
-    MaxAnglestore = np.zeros(N)
-    dFMinAnglestoreRI = np.zeros(N)
-    dFMaxAnglestoreRI = np.zeros(N)
+    MinAnglestore = np.zeros(N, dtype=np.longdouble)
+    MaxAnglestore = np.zeros(N, dtype=np.longdouble)
+    dFMinAnglestoreRI = np.zeros(N, dtype=np.longdouble)
+    dFMaxAnglestoreRI = np.zeros(N, dtype=np.longdouble)
 
 
     for n in range(N):
-        QR = np.zeros((3,3))
-        QI = np.zeros((3,3))
-        uR =np.zeros(3)
-        uI = np.zeros(3)
+        QR = np.zeros((3,3), dtype=np.longdouble)
+        QI = np.zeros((3,3), dtype=np.longdouble)
+        uR =np.zeros(3, dtype=np.longdouble)
+        uI = np.zeros(3, dtype=np.longdouble)
         for i in range(3):
             uR[i]=URstore[n,i]
             uI[i]=UIstore[n,i]

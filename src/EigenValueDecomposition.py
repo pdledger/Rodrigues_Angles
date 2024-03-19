@@ -3,32 +3,32 @@ import numpy as np
 def EigenValueDecomposition(N0,TensorArray,Frequencies):
 
     N = len(Frequencies)
-    MultRstore=np.zeros(N)
-    MultIstore=np.zeros(N)
-    MultRtildestore=np.zeros(N)
-    MultN0store=np.zeros(N) # repeated storage of N0 multplicities, eigenvectors, eigenvalues etc
+    MultRstore=np.zeros(N, dtype=np.longdouble)
+    MultIstore=np.zeros(N, dtype=np.longdouble)
+    MultRtildestore=np.zeros(N, dtype=np.longdouble)
+    MultN0store=np.zeros(N, dtype=np.longdouble) # repeated storage of N0 multplicities, eigenvectors, eigenvalues etc
 
-    URstore=np.zeros((N,3))
-    QRstore=np.zeros((N,3,3))
-    UIstore=np.zeros((N,3))
-    QIstore=np.zeros((N,3,3))
-    UN0store=np.zeros((N,3))
-    QN0store=np.zeros((N,3,3))
-    URtildestore=np.zeros((N,3))
-    QRtildestore=np.zeros((N,3,3))
+    URstore=np.zeros((N,3), dtype=np.longdouble)
+    QRstore=np.zeros((N,3,3), dtype=np.longdouble)
+    UIstore=np.zeros((N,3), dtype=np.longdouble)
+    QIstore=np.zeros((N,3,3), dtype=np.longdouble)
+    UN0store=np.zeros((N,3), dtype=np.longdouble)
+    QN0store=np.zeros((N,3,3), dtype=np.longdouble)
+    URtildestore=np.zeros((N,3), dtype=np.longdouble)
+    QRtildestore=np.zeros((N,3,3), dtype=np.longdouble)
 
     for n in range(N):
         Mlist = TensorArray[n,:]
-        Mten = np.array([[Mlist[0], Mlist[1], Mlist[2]],[Mlist[3], Mlist[4], Mlist[5]],[Mlist[6], Mlist[7], Mlist[8]]])
+        Mten = np.array([[Mlist[0], Mlist[1], Mlist[2]],[Mlist[3], Mlist[4], Mlist[5]],[Mlist[6], Mlist[7], Mlist[8]]], dtype=np.longcomplex)
         Rtilde = np.real(Mten)
         I = np.imag(Mten)
-        R = np.real(Mten)-N0
+        R = (np.real(Mten)-N0)
 
         # Computation of eigenvalues, eigenvector
-        uR,VR = np.linalg.eig(R)
-        uRtilde,VRtilde = np.linalg.eig(Rtilde)
-        uI,VI = np.linalg.eig(I)
-        uN0,VN0 = np.linalg.eig(N0)
+        uR,VR = np.linalg.eig(R.astype(dtype=float))
+        uRtilde,VRtilde = np.linalg.eig(Rtilde.astype(dtype=float))
+        uI,VI = np.linalg.eig(I.astype(dtype=float))
+        uN0,VN0 = np.linalg.eig(N0.astype(dtype=float))
 
 
     # Possible multiplicities are 1, 2 or 3

@@ -62,6 +62,9 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
                 for i in range(3):
                     puI[i]=uI[ind[i]-1]
 
+                uRopt=np.copy(uR)
+                uIopt =np.copy(puI)
+
                 thetaopt=1e10
                 Kopt=np.zeros((3,3))
                 for k in range(8):
@@ -74,10 +77,48 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
                         if theta < thetaopt:
                             thetaopt=theta
                             Kopt=np.copy(K)
-                            uRopt=np.copy(uR)
-                            uIopt =np.copy(puI)
+                            #uRopt=np.copy(uR)
+                            #uIopt =np.copy(puI)
                             QRopt = np.copy(QR)
                             QIopt = np.copy(QIordsign)
+
+
+        for m in range(6):
+            sum=0.
+            ind=Perm[m,:]
+            for i in range(3):
+                sum = sum+ abs(uI[i]-uR[ind[i]-1])**2
+            check = False
+            if sorteigenvalues=="MinDifference" and sum < diffeig:
+                check = True
+            elif sorteigenvalues=="MaxDifference" and sum > diffeig:
+                check = True
+            if check==True:
+                diffeig = sum
+                puR=np.zeros(3)
+                #S=np.zeros((3,3))
+                for i in range(3):
+                    puR[i]=uR[ind[i]-1]
+
+                uRopt=np.copy(puR)
+                uIopt=np.copy(uI)
+
+                thetaopt=1e10
+                Kopt=np.zeros((3,3))
+                for k in range(8):
+                    QRordsign=np.zeros((3,3))
+                    for j in range(3):
+                        QRordsign[:,j] = sign[k,j]*QR[:,ind[j]-1]
+                    if np.linalg.det(np.transpose(QRordsign)@QI)> 0:
+                        # Only do for valid rotation matrices with det(R) + ve (=1)
+                        theta, K, Tvec= Rodrigues(QRordsign, QI)
+                        if theta < thetaopt:
+                            thetaopt=theta
+                            Kopt=np.copy(K)
+                            #uRopt=np.copy(uR)
+                            #uIopt =np.copy(puI)
+                            QRopt = np.copy(QRordsign)
+                            QIopt = np.copy(QI)
         # Store the optimal combination
         for i in range(3):
             SortedURstore[n,i]=uRopt[i]
