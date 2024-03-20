@@ -113,7 +113,8 @@ def main(directory,MaxOmega,Figures="On"):
         "RIfmeasapprx_den_const_max": RIfmeasapprx_den_const_max, "RIfmeasapprx_den_const_min": RIfmeasapprx_den_const_min, \
         "RIcommeapprx_den_const_max":RIcommeapprx_den_const_max, "RIcommeapprx_den_const_min": RIcommeapprx_den_const_min, \
         "URstore":URstore, "UIstore":UIstore, "URtildestore":URtildestore, "UN0store":UN0store, "QRstore":QRstore, "QIstore":QIstore, "QRtildestore":QRtildestore, \
-         "QN0store":QN0store}
+         "QN0store":QN0store,"AnglestoreRIfmeasfullconstsortedmindiff": AnglestoreRIfmeasfullconstsortedmindiff,\
+         "AnglestoreRIfmeasfullconstsortedmaxdiff": AnglestoreRIfmeasfullconstsortedmaxdiff}
 
     # Plots of minimal and maximal angles and compare with MaxDifference and MinDifference
     if Figures=="On":

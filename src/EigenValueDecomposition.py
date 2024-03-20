@@ -25,22 +25,52 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         R = (np.real(Mten)-N0)
 
         # Computation of eigenvalues, eigenvector
+        # Note that the we need to apply to normal matrices and so consider R^TR = R R = R^2
+        # Note that the sqrt( eigenvalues of R^2) are the abs(lambda(R))
+        # The eigenvectors of R^2 are the same as the eigenvector of R
+        #uR,VR = np.linalg.eig((R@R).astype(dtype=float))
+        #uRtilde,VRtilde = np.linalg.eig((Rtilde@Rtilde).astype(dtype=float))
+        #uI,VI = np.linalg.eig((I@I).astype(dtype=float))
+        #uN0,VN0 = np.linalg.eig((N0@N0).astype(dtype=float))
+        #uR=np.sqrt(uR)
+        #uRtilde=np.sqrt(uRtilde)
+        #uI=np.sqrt(uI)
+        #uN0=np.sqrt(uN0)
+
         uR,VR = np.linalg.eig(R.astype(dtype=float))
         uRtilde,VRtilde = np.linalg.eig(Rtilde.astype(dtype=float))
         uI,VI = np.linalg.eig(I.astype(dtype=float))
         uN0,VN0 = np.linalg.eig(N0.astype(dtype=float))
+        #uR=np.abs(uR)
+        #uRtilde=np.abs(uRtilde)
+        #uI=np.abs(uI)
+        #uN0=np.abs(uN0)
 
         # Sort the eigenvalues from largest to smallest magnitude
-        ind = np.argsort(-np.abs(uR))
+        # ind = np.argsort(-np.abs(uR))
+        # uR = uR[ind]
+        # VR = VR[:,ind]
+        # ind = np.argsort(-np.abs(uI))
+        # uI = uI[ind]
+        # VI = VI[:,ind]
+        # ind = np.argsort(-np.abs(uRtilde))
+        # uRtilde = uRtilde[ind]
+        # VRtilde = VRtilde[:,ind]
+        # ind = np.argsort(-np.abs(uN0))
+        # uN0 = uN0[ind]
+        # VN0 = VN0[:,ind]
+        # Sort the eigenvalues from largest to smallest
+
+        ind = np.argsort(np.abs(uR))
         uR = uR[ind]
         VR = VR[:,ind]
-        ind = np.argsort(-np.abs(uI))
+        ind = np.argsort(np.abs(uI))
         uI = uI[ind]
         VI = VI[:,ind]
-        ind = np.argsort(-np.abs(uRtilde))
+        ind = np.argsort(np.abs(uRtilde))
         uRtilde = uRtilde[ind]
         VRtilde = VRtilde[:,ind]
-        ind = np.argsort(-np.abs(uN0))
+        ind = np.argsort(np.abs(uN0))
         uN0 = uN0[ind]
         VN0 = VN0[:,ind]
 

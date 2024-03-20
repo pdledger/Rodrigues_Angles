@@ -3,6 +3,10 @@ import time
 def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies):
     N=len(Frequencies)
     Fexactconst = np.zeros(N)
+    Fexactconst3 = np.zeros(N)
+    Fexactconst4 = np.zeros(N)
+
+
     #Fapproxconst = np.zeros(N)
     Fapproxconst_min = np.zeros(N, dtype=np.longdouble)
     Fapproxconst_max = np.zeros(N, dtype=np.longdouble)
@@ -30,7 +34,16 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
             diffeig+=np.abs(uR[i]-uI[i])**2
         normalisation =np.abs( np.trace(K@K@np.diag((uR))@np.diag((uI))))- np.abs(np.trace(K@np.diag((uR))@K@np.diag((uI))))
         Fexactconst[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation)
+        #normalisation =np.abs( np.trace(K@K@np.diag((uR))@K@np.diag((uI))))- np.abs(np.trace(K@K@np.diag((uI))@K@np.diag((uR))))
+        #Fexactconst3[n] = 2*np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation)
+        #normalisation =np.abs( np.trace(K@K@np.diag((uR))@K@K@np.diag((uI))))
+        #Fexactconst4[n] = 4*np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation)
+
     Fexactconst= np.sqrt(Fexactconst)
+    #Fexactconst3= (Fexactconst3)**(1/3)
+    #Fexactconst4= (Fexactconst4)**(1/4)
+
+
 
 
     # Next compute F using the apprx constant without K, QR or QI
@@ -46,7 +59,7 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
                 R[i,j] = Rstore[n,i,j]
                 I[i,j] = Istore[n,i,j]
         diffeig=0.
-        #print(Frequencies[n],uR,uI)
+        print(Frequencies[n],uR,uI)
         for i in range(3):
             diffeig+=(uR[i]-uI[i])**2
 
@@ -70,6 +83,7 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
         #Fapproxconst_max[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_max)
         Fapproxconst_min[n] = (np.linalg.norm(R-I,ord='fro')**2 - diffeig) / normalisation_min
         Fapproxconst_max[n] = (np.linalg.norm(R-I,ord='fro')**2 - diffeig) / normalisation_max
+        print(Frequencies[n],(np.linalg.norm(R-I,ord='fro')**2 - diffeig),normalisation_min,normalisation_max)
         if Fapproxconst_min[n] <0:
             Fapproxconst_min[n] = - Fapproxconst_min[n]
         if Fapproxconst_max[n] <0:
