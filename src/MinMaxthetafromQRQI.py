@@ -77,7 +77,7 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
             min_angle, K, tvec = Rodrigues(QR,QI)
             #print(min_angle)
             dF_min = dFmetric(QR,QI)
-            print(min_angle)
+            #print(min_angle)
             #time.sleep(10)
 
             #QR, QI, uR = CheckOrdering(QR,QI,uR,1)
@@ -105,12 +105,12 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
         MaxAnglestore[n] = max_angle
         dFMinAnglestoreRI[n] = dF_min
         dFMaxAnglestoreRI[n] = dF_max
-        if n > 5 and n < 8:
-            print(n,Rmult)
-            print(uR,uI)
-            print(QR,QI)
-            print(min_angle,max_angle)
-            print(dF_min,dF_max)
+        #if n > 5 and n < 8:
+        #    print(n,Rmult)
+        #    print(uR,uI)
+        #    print(QR,QI)
+        #    print(min_angle,max_angle)
+        #    print(dF_min,dF_max)
 
 
 

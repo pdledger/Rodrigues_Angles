@@ -1,4 +1,5 @@
 import numpy as np
+import time
 def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies):
     N=len(Frequencies)
     Fexactconst = np.zeros(N)
@@ -45,9 +46,9 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
                 R[i,j] = Rstore[n,i,j]
                 I[i,j] = Istore[n,i,j]
         diffeig=0.
-        print(Frequencies[n],uR,uI)
+        #print(Frequencies[n],uR,uI)
         for i in range(3):
-            diffeig+=np.abs(uR[i]-uI[i])**2
+            diffeig+=(uR[i]-uI[i])**2
 
         #normalisationapprox=0
         #for j in range(3):
@@ -65,8 +66,23 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
         normalisation_min = np.min(evlist)
         normalisation_max = np.max(evlist)
         Tol=1e-6
-        Fapproxconst_min[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_min)
-        Fapproxconst_max[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_max)
+        #Fapproxconst_min[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_min)
+        #Fapproxconst_max[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_max)
+        Fapproxconst_min[n] = (np.linalg.norm(R-I,ord='fro')**2 - diffeig) / normalisation_min
+        Fapproxconst_max[n] = (np.linalg.norm(R-I,ord='fro')**2 - diffeig) / normalisation_max
+        if Fapproxconst_min[n] <0:
+            Fapproxconst_min[n] = - Fapproxconst_min[n]
+        if Fapproxconst_max[n] <0:
+            Fapproxconst_max[n] = - Fapproxconst_max[n]
+        #print("fmes",Frequencies[n],(np.linalg.norm(R-I,ord='fro')**2 - diffeig),normalisation_min,normalisation_max)
+        #print(R-np.transpose(R),I-np.transpose(I))
+        #print(R,I)
+        #print(uR,uI)
+        #uR,VR = np.linalg.eig(R.astype(dtype=float))
+        #uI,VI = np.linalg.eig(I.astype(dtype=float))
+        #print(uR,uI)
+        #time.sleep(10)
+
         # if abs(normalisation_min/(np.linalg.norm(uI)*np.linalg.norm(uR))) > Tol**2:
         #     Fapproxconst_min[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_min)
         # else:

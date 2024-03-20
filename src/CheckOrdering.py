@@ -57,7 +57,7 @@ def CheckOrdering(QR,QI,uR,uI,minmax):
             Q = np.transpose(QR)@QI
             Q = Q /np.linalg.norm(Q.astype(dtype=float),ord=2)
             tol=0.01
-            if np.linalg.det(Q)> 0:
+            if np.linalg.det(Q.astype(dtype=float))> 0:
                 #LogQ = scipy.linalg.logm(Q)
                 # determine the angle for the current combination
                 ntheta = StableAngle(Q)
