@@ -41,15 +41,10 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
 
         if sorteigenvalues=="MinDifference":
             # Find min combination
-
             diffeig=1e10
-            uRopt=np.sort(uR)
-            uIopt =np.sort(uI)
         elif sorteigenvalues=="MaxDifference":
             # Find max combination
             diffeig=0.
-            uIopt=np.argsort(-(uI))
-            uRopt=np.argsort(-(uR))
         for m in range(6):
             sum=0.
             ind=Perm[m,:]
@@ -63,37 +58,43 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
             if check==True:
                 diffeig = sum
                 puI=np.zeros(3)
-        #         #S=np.zeros((3,3))
+                #S=np.zeros((3,3))
                 for i in range(3):
                     puI[i]=uI[ind[i]-1]
-        #
+
                 uRopt=np.copy(uR)
                 uIopt =np.copy(puI)
 
-        # thetaopt=1e10
-        # Kopt=np.zeros((3,3))
-        # for k in range(8):
-        #     QIordsign=np.zeros((3,3))
-        #     for j in range(3):
-        #         QIordsign[:,j] = sign[k,j]*QI[:,ind[j]-1]
-        #     for kk in range(8):
-        #         QRordsign=np.zeros((3,3))
-        #         for j in range(3):
-        #             # Only the ordering of the columns of QI has been changed, but
-        #             # we can change the signs of the columns of QR and QI
-        #             QRordsign[:,j] = sign[kk,j]*QR[:,j]
-        #
-        #
-        #         if np.linalg.det(np.transpose(QRordsign)@QIordsign)> 0:
-        #         # Only do for valid rotation matrices with det(R) + ve (=1)
-        #             theta, K, Tvec= Rodrigues(QRordsign, QIordsign)
-        #             if theta < thetaopt:
-        #                 thetaopt=theta
-        #                 Kopt=np.copy(K)
-        #                 #uRopt=np.copy(uR)
-        #                 #uIopt =np.copy(puI)
-        #                 QRopt = np.copy(QRordsign)
-        #                 QIopt = np.copy(QIordsign)
+                thetaopt=1e10
+                Kopt=np.zeros((3,3))
+                for k in range(8):
+                    QIordsign=np.zeros((3,3))
+                    for j in range(3):
+                        QIordsign[:,j] = sign[k,j]*QI[:,ind[j]-1]
+                    if np.linalg.det(np.transpose(QR)@QIordsign)> 0:
+                        # Only do for valid rotation matrices with det(R) + ve (=1)
+                        theta, K, Tvec= Rodrigues(QR, QIordsign)
+                        if theta < thetaopt:
+                            thetaopt=theta
+                            Kopt=np.copy(K)
+                            #uRopt=np.copy(uR)
+                            #uIopt =np.copy(puI)
+                            QRopt = np.copy(QR)
+                            QIopt = np.copy(QIordsign)
+                for k in range(8):
+                    QRordsign=np.zeros((3,3))
+                    for j in range(3):
+                        QRordsign[:,j] = sign[k,j]*QR[:,ind[j]-1]
+                    if np.linalg.det(np.transpose(QRordsign)@QI)> 0:
+                        # Only do for valid rotation matrices with det(R) + ve (=1)
+                        theta, K, Tvec= Rodrigues(QRordsign, QI)
+                        if theta < thetaopt:
+                            thetaopt=theta
+                            Kopt=np.copy(K)
+                            #uRopt=np.copy(uR)
+                            #uIopt =np.copy(puI)
+                            QRopt = np.copy(QRordsign)
+                            QIopt = np.copy(QI)
 
 
         # for m in range(6):
@@ -141,10 +142,10 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
             SortedURstore[n,i]=uRopt[i]
             SortedUIstore[n,i]=uIopt[i]
 
-            #for j in range(3):
-                #SortedQRstore[n,i,j] = QRopt[i,j]
-                #SortedQIstore[n,i,j] = QIopt[i,j]
-                #SortedKstore[n,i,j] = Kopt[i,j]
+            for j in range(3):
+                SortedQRstore[n,i,j] = QRopt[i,j]
+                SortedQIstore[n,i,j] = QIopt[i,j]
+                SortedKstore[n,i,j] = Kopt[i,j]
         #print("Eigenvalues,Eignvectors")
         #if n==0:
         #    print(uRopt,uIopt)

@@ -61,16 +61,16 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         # VN0 = VN0[:,ind]
         # Sort the eigenvalues from largest to smallest
 
-        ind = np.argsort(np.abs(uR))
+        ind = np.argsort(-(uR))
         uR = uR[ind]
         VR = VR[:,ind]
-        ind = np.argsort(np.abs(uI))
+        ind = np.argsort(-(uI))
         uI = uI[ind]
         VI = VI[:,ind]
-        ind = np.argsort(np.abs(uRtilde))
+        ind = np.argsort(-(uRtilde))
         uRtilde = uRtilde[ind]
         VRtilde = VRtilde[:,ind]
-        ind = np.argsort(np.abs(uN0))
+        ind = np.argsort(-uN0)
         uN0 = uN0[ind]
         VN0 = VN0[:,ind]
 

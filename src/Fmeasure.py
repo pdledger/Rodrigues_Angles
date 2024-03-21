@@ -31,7 +31,7 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
                 I[i,j] = Istore[n,i,j]
         diffeig=0.
         for i in range(3):
-            diffeig+=np.abs(uR[i]-uI[i])**2
+            diffeig+=(uR[i]-uI[i])**2
         normalisation =np.abs( np.trace(K@K@np.diag((uR))@np.diag((uI))))- np.abs(np.trace(K@np.diag((uR))@K@np.diag((uI))))
         Fexactconst[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation)
         #normalisation =np.abs( np.trace(K@K@np.diag((uR))@K@np.diag((uI))))- np.abs(np.trace(K@K@np.diag((uI))@K@np.diag((uR))))
