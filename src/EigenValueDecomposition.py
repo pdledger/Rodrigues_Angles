@@ -1,25 +1,27 @@
 import numpy as np
+import scipy
+import jax
 
 def EigenValueDecomposition(N0,TensorArray,Frequencies):
 
     N = len(Frequencies)
-    MultRstore=np.zeros(N, dtype=np.longdouble)
-    MultIstore=np.zeros(N, dtype=np.longdouble)
-    MultRtildestore=np.zeros(N, dtype=np.longdouble)
-    MultN0store=np.zeros(N, dtype=np.longdouble) # repeated storage of N0 multplicities, eigenvectors, eigenvalues etc
+    MultRstore=np.zeros(N)
+    MultIstore=np.zeros(N)
+    MultRtildestore=np.zeros(N)
+    MultN0store=np.zeros(N) # repeated storage of N0 multplicities, eigenvectors, eigenvalues etc
 
-    URstore=np.zeros((N,3), dtype=np.longdouble)
-    QRstore=np.zeros((N,3,3), dtype=np.longdouble)
-    UIstore=np.zeros((N,3), dtype=np.longdouble)
-    QIstore=np.zeros((N,3,3), dtype=np.longdouble)
-    UN0store=np.zeros((N,3), dtype=np.longdouble)
-    QN0store=np.zeros((N,3,3), dtype=np.longdouble)
-    URtildestore=np.zeros((N,3), dtype=np.longdouble)
-    QRtildestore=np.zeros((N,3,3), dtype=np.longdouble)
+    URstore=np.zeros((N,3),dtype=np.longdouble)
+    QRstore=np.zeros((N,3,3),dtype=np.longdouble)
+    UIstore=np.zeros((N,3),dtype=np.longdouble)
+    QIstore=np.zeros((N,3,3),dtype=np.longdouble)
+    UN0store=np.zeros((N,3),dtype=np.longdouble)
+    QN0store=np.zeros((N,3,3),dtype=np.longdouble)
+    URtildestore=np.zeros((N,3),dtype=np.longdouble)
+    QRtildestore=np.zeros((N,3,3),dtype=np.longdouble)
     tol=1e-4
     for n in range(N):
         Mlist = TensorArray[n,:]
-        Mten = np.array([[Mlist[0], Mlist[1], Mlist[2]],[Mlist[3], Mlist[4], Mlist[5]],[Mlist[6], Mlist[7], Mlist[8]]], dtype=np.longcomplex)
+        Mten = np.array([[Mlist[0], Mlist[1], Mlist[2]],[Mlist[3], Mlist[4], Mlist[5]],[Mlist[6], Mlist[7], Mlist[8]]],dtype=np.clongdouble)
         Rtilde = np.real(Mten)#+np.diag(np.random.rand(3))*tol
         I = np.imag(Mten)#+np.diag(np.random.rand(3))*tol
         R = (np.real(Mten)-N0)
@@ -37,10 +39,20 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         #uI=np.sqrt(uI)
         #uN0=np.sqrt(uN0)
 
-        uR,VR = np.linalg.eig(R.astype(dtype=float))
-        uRtilde,VRtilde = np.linalg.eig(Rtilde.astype(dtype=float))
-        uI,VI = np.linalg.eig(I.astype(dtype=float))
-        uN0,VN0 = np.linalg.eig(N0.astype(dtype=float))
+        uR,VR = np.linalg.eig(R.astype(dtype=float))#jax.numpy.linalg.eig(R)
+        uR=np.real(uR)
+        VR=np.real(VR)
+        #print(uR,VR)
+        uRtilde,VRtilde = np.linalg.eig(Rtilde.astype(dtype=float))#jax.numpy.linalg.eig(Rtilde)
+        uRtilde=np.real(uRtilde)
+        VRtilde=np.real(VRtilde)
+        uI,VI = np.linalg.eig(I.astype(dtype=float))#jax.numpy.linalg.eig(I)
+        uI=np.real(uI)
+        VI=np.real(VI)
+        #print(uI)
+        uN0,VN0 = np.linalg.eig(N0.astype(dtype=float))#jax.numpy.linalg.eig(N0)
+        uN0=np.real(uN0)
+        VN0=np.real(VN0)
         #uR=np.abs(uR)
         #uRtilde=np.abs(uRtilde)
         #uI=np.abs(uI)
@@ -61,18 +73,19 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         # VN0 = VN0[:,ind]
         # Sort the eigenvalues from largest to smallest
 
-        ind = np.argsort(-(uR))
-        uR = uR[ind]
-        VR = VR[:,ind]
-        ind = np.argsort(-(uI))
-        uI = uI[ind]
-        VI = VI[:,ind]
-        ind = np.argsort(-(uRtilde))
-        uRtilde = uRtilde[ind]
-        VRtilde = VRtilde[:,ind]
-        ind = np.argsort(-uN0)
-        uN0 = uN0[ind]
-        VN0 = VN0[:,ind]
+#        ind = np.argsort(-(uR))
+#        uR = uR[ind]
+#        VR = VR[:,ind]
+
+#        ind = np.argsort(-(uI))
+#        uI = uI[ind]
+#        VI = VI[:,ind]
+#        ind = np.argsort(-(uRtilde))
+#        uRtilde = uRtilde[ind]
+#        VRtilde = VRtilde[:,ind]
+#        ind = np.argsort(-uN0)
+#        uN0 = uN0[ind]
+#        VN0 = VN0[:,ind]
 
 
     # Possible multiplicities are 1, 2 or 3
@@ -80,10 +93,10 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
     #  case 1 : 1 , 1, 1 if they are distinct
     #  case 2 : or 1, 2
     #  case 3 : or 3
-        MultR = CheckMult(uR,R)
-        MultI = CheckMult(uI,I)
-        MultRtilde = CheckMult(uRtilde,Rtilde)
-        MultN0 = CheckMult(uN0,N0)
+        MultR = CheckMult(uR,R.astype(dtype=float))
+        MultI = CheckMult(uI,I.astype(dtype=float))
+        MultRtilde = CheckMult(uRtilde,Rtilde.astype(dtype=float))
+        MultN0 = CheckMult(uN0,N0.astype(dtype=float))
 
 
         #if n > 5 and n < 8:
@@ -117,20 +130,20 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
 
 def CheckMult(u,Tensor):
     # Dynamically adjust tolerance
-#    Tol=1e-4*np.min(np.abs(u))
-#    mult=0
+    Tol=1e-4*np.min(np.abs(u))
+    mult=0
 #    # Determine the multplicity of eigenvalue lambda_i as 3 - rank(R -lambda_i eye(3))
-#    for i in range(3):
-#        mult=np.max([mult,3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol)])
-#
-    Tol=5e-4
-    mult=1
     for i in range(3):
-        for j in range(i+1,3):
-            if i != j:
-                if np.abs(u[i]-u[j])/abs(u[i]) < Tol:
-                    mult=mult+1
-                    if mult > 3:
-                        mult =3
+        mult=np.max([mult,3-np.linalg.matrix_rank(Tensor-u[i]*np.eye(3),tol=Tol)])
+#
+    # Tol=5e-4
+    # mult=1
+    # for i in range(3):
+    #     for j in range(i+1,3):
+    #         if i != j:
+    #             if np.abs(u[i]-u[j])/abs(u[i]) < Tol:
+    #                 mult=mult+1
+    #                 if mult > 3:
+    #                     mult =3
 
     return mult

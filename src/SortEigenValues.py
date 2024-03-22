@@ -25,10 +25,10 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
 
 
     for n in range(N):
-        QR = np.zeros((3,3))
-        QI = np.zeros((3,3))
-        uR =np.zeros(3)
-        uI = np.zeros(3)
+        QR = np.zeros((3,3),dtype=np.longdouble)
+        QI = np.zeros((3,3),dtype=np.longdouble)
+        uR =np.zeros(3,dtype=np.longdouble)
+        uI = np.zeros(3,dtype=np.longdouble)
         for i in range(3):
             uR[i]=URstore[n,i]
             uI[i]=UIstore[n,i]
@@ -43,32 +43,33 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
             # Find min combination
 
             diffeig=1e10
-            uRopt=np.sort(uR)
-            uIopt =np.sort(uI)
+
         elif sorteigenvalues=="MaxDifference":
             # Find max combination
             diffeig=0.
-            uIopt=np.argsort(-(uI))
-            uRopt=np.argsort(-(uR))
+
         for m in range(6):
-            sum=0.
+            mysum=0.
             ind=Perm[m,:]
             for i in range(3):
-                sum = sum+ (uR[i]-uI[ind[i]-1])**2
+                mysum = mysum+ (uR[i]-uI[ind[i]-1])**2
             check = False
-            if sorteigenvalues=="MinDifference" and sum < diffeig:
+            if sorteigenvalues=="MinDifference" and mysum < diffeig:
                 check = True
-            elif sorteigenvalues=="MaxDifference" and sum > diffeig:
+            elif sorteigenvalues=="MaxDifference" and mysum > diffeig:
                 check = True
             if check==True:
-                diffeig = sum
-                puI=np.zeros(3)
+                diffeig = mysum
+                puI=np.zeros(3,dtype=np.longdouble)
         #         #S=np.zeros((3,3))
                 for i in range(3):
                     puI[i]=uI[ind[i]-1]
         #
-                uRopt=np.copy(uR)
-                uIopt =np.copy(puI)
+                #uRopt=np.copy(uR)
+                #uIopt =np.copy(puI)
+                for i in range(3):
+                    SortedURstore[n,i]=uR[i]
+                    SortedUIstore[n,i]=puI[i]
 
         # thetaopt=1e10
         # Kopt=np.zeros((3,3))
@@ -137,9 +138,9 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
         #    uIopt=uIopt[np.argsort(-uIopt)]
         #else:
         #    uIopt=np.sort(uIopt)
-        for i in range(3):
-            SortedURstore[n,i]=uRopt[i]
-            SortedUIstore[n,i]=uIopt[i]
+        #for i in range(3):
+        #    SortedURstore[n,i]=uRopt[i]
+        #    SortedUIstore[n,i]=uIopt[i]
 
             #for j in range(3):
                 #SortedQRstore[n,i,j] = QRopt[i,j]

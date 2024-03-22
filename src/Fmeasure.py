@@ -2,24 +2,24 @@ import numpy as np
 import time
 def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies):
     N=len(Frequencies)
-    Fexactconst = np.zeros(N)
-    Fexactconst3 = np.zeros(N)
-    Fexactconst4 = np.zeros(N)
+    Fexactconst = np.zeros(N,dtype=np.longdouble)
+    Fexactconst3 = np.zeros(N,dtype=np.longdouble)
+    Fexactconst4 = np.zeros(N,dtype=np.longdouble)
 
 
     #Fapproxconst = np.zeros(N)
-    Fapproxconst_min = np.zeros(N, dtype=np.longdouble)
-    Fapproxconst_max = np.zeros(N, dtype=np.longdouble)
+    Fapproxconst_min = np.zeros(N,dtype=np.longdouble)
+    Fapproxconst_max = np.zeros(N,dtype=np.longdouble)
     den_const=np.zeros(N)
     # First compute F using the exact constant
     for n in range(N):
-        QR = np.zeros((3,3), dtype=np.longdouble )
-        QI = np.zeros((3,3), dtype=np.longdouble)
-        R=np.zeros((3,3), dtype=np.longdouble)
-        I=np.zeros((3,3), dtype=np.longdouble)
-        uR = np.zeros(3, dtype=np.longdouble)
-        uI = np.zeros(3, dtype=np.longdouble)
-        K = np.zeros((3,3), dtype=np.longdouble)
+        QR = np.zeros((3,3),dtype=np.longdouble )
+        QI = np.zeros((3,3),dtype=np.longdouble)
+        R=np.zeros((3,3),dtype=np.longdouble)
+        I=np.zeros((3,3),dtype=np.longdouble)
+        uR = np.zeros(3,dtype=np.longdouble)
+        uI = np.zeros(3,dtype=np.longdouble)
+        K = np.zeros((3,3),dtype=np.longdouble)
         for i in range(3):
             uR[i] = SortedURstore[n,i]
             uI[i] = SortedUIstore[n,i]
@@ -48,10 +48,10 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
 
     # Next compute F using the apprx constant without K, QR or QI
     for n in range(N):
-        R=np.zeros((3,3), dtype=np.longdouble)
-        I=np.zeros((3,3), dtype=np.longdouble)
-        uR = np.zeros(3, dtype=np.longdouble)
-        uI = np.zeros(3, dtype=np.longdouble)
+        R=np.zeros((3,3),dtype=np.longdouble)
+        I=np.zeros((3,3),dtype=np.longdouble)
+        uR = np.zeros(3,dtype=np.longdouble)
+        uI = np.zeros(3,dtype=np.longdouble)
         for i in range(3):
             uR[i] = SortedURstore[n,i]
             uI[i] = SortedUIstore[n,i]
@@ -59,15 +59,15 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
                 R[i,j] = Rstore[n,i,j]
                 I[i,j] = Istore[n,i,j]
         diffeig=0.
-        print(Frequencies[n],uR,uI)
+        #print(Frequencies[n],uR,uI)
         for i in range(3):
-            diffeig+=(uR[i]-uI[i])**2
+            diffeig=diffeig+(uR[i]-uI[i])**2
 
         #normalisationapprox=0
         #for j in range(3):
         #    normalisationapprox-=2*(uI[j]*uR[j])/np.sqrt(3)
         #normalisationapprox+=((uI[1]*uR[0])+(uI[2]*uR[0])+(uI[0]*uR[1])+(uI[2]*uR[1])+(uI[0]*uR[2])+(uI[1]*uR[2]))/np.sqrt(3)
-        evlist = np.zeros(3, dtype=np.longdouble)
+        evlist = np.zeros(3,dtype=np.longdouble)
         #evlist[0]= -uI[1]*uR[1]-uI[2]*uR[2]+uI[2]*uR[1]+uI[1]*uR[2]
         #evlist[1]= -uI[0]*uR[0]-uI[2]*uR[2]+uI[2]*uR[0]+uI[0]*uR[2]
         #evlist[2]= -uI[1]*uR[1]-uI[0]*uR[0]+uI[1]*uR[0]+uI[0]*uR[1]
@@ -76,18 +76,27 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
         evlist[2]= - (uI[0]-uI[1])*(uR[0]-uR[1])
 
 
-        normalisation_min = np.min(evlist)
-        normalisation_max = np.max(evlist)
+        normalisation_min = np.min(np.abs(evlist))
+        normalisation_max = np.max(np.abs(evlist))
         Tol=1e-6
         #Fapproxconst_min[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_min)
         #Fapproxconst_max[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_max)
-        Fapproxconst_min[n] = (np.linalg.norm(R-I,ord='fro')**2 - diffeig) / normalisation_min
-        Fapproxconst_max[n] = (np.linalg.norm(R-I,ord='fro')**2 - diffeig) / normalisation_max
-        print(Frequencies[n],(np.linalg.norm(R-I,ord='fro')**2 - diffeig),normalisation_min,normalisation_max)
-        if Fapproxconst_min[n] <0:
-            Fapproxconst_min[n] = - Fapproxconst_min[n]
-        if Fapproxconst_max[n] <0:
-            Fapproxconst_max[n] = - Fapproxconst_max[n]
+        Fapproxconst_min[n] = np.min([(np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig)) / (normalisation_min),
+        (np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig)) / (normalisation_max)])
+        Fapproxconst_max[n] = np.max([(np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig)) / (normalisation_min),
+        (np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig)) / (normalisation_max)])
+
+        #Fapproxconst_min[n] = np.min([np.abs(np.linalg.norm(R/ np.sqrt(normalisation_min) - I /np.sqrt(normalisation_min) ,ord='fro')**2 - diffeig / normalisation_min),
+        #np.abs(np.linalg.norm(R/ np.sqrt(normalisation_max)- I/ np.sqrt(normalisation_max) ,ord='fro')**2 - diffeig / normalisation_max)])
+        #Fapproxconst_max[n] = np.max([np.abs(np.linalg.norm(R/ np.sqrt(normalisation_min)-I/ np.sqrt(normalisation_min),ord='fro')**2 - diffeig / normalisation_min),
+        #np.abs(np.linalg.norm(R/ np.sqrt(normalisation_max) - I/ np.sqrt(normalisation_max),ord='fro')**2 - diffeig / normalisation_max)])
+
+
+        #print(Frequencies[n],(np.linalg.norm(R-I,ord='fro')**2 - diffeig),normalisation_min,normalisation_max)
+        #if Fapproxconst_min[n] <0:
+        #    Fapproxconst_min[n] = - Fapproxconst_min[n]
+        #if Fapproxconst_max[n] <0:
+        #    Fapproxconst_max[n] = - Fapproxconst_max[n]
         #print("fmes",Frequencies[n],(np.linalg.norm(R-I,ord='fro')**2 - diffeig),normalisation_min,normalisation_max)
         #print(R-np.transpose(R),I-np.transpose(I))
         #print(R,I)
@@ -117,6 +126,7 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
     Fapproxconst_min=np.sqrt(Fapproxconst_min)
     Fapproxconst_max=np.sqrt(Fapproxconst_max)
 
+    print(Fapproxconst_min)
 
     return Fexactconst,Fapproxconst_min,Fapproxconst_max,den_const
     #Fapproxconst

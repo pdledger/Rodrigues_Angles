@@ -62,10 +62,15 @@ def Commeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sort
         evlist[1]=2*(uR[0]-uR[2])**2*(uI[0]-uI[2])**2
         evlist[2]=2*(uR[0]-uR[1])**2*(uI[0]-uI[1])**2
 
-        normalisation_min = np.min(evlist)
-        normalisation_max = np.max(evlist)
-        Comapproxconst_min[n] = np.abs(np.linalg.norm(Z,ord='fro')**2 ) / np.abs(normalisation_min)
-        Comapproxconst_max[n] = np.abs(np.linalg.norm(Z,ord='fro')**2 ) / np.abs(normalisation_max)
+        normalisation_min = np.min(np.abs(evlist))
+        normalisation_max = np.max(np.abs(evlist))
+        Comapproxconst_min[n] = np.min([np.abs(np.linalg.norm(Z,ord='fro')**2 ) / normalisation_min,
+            np.abs(np.linalg.norm(Z,ord='fro')**2 ) / normalisation_max])
+        Comapproxconst_max[n] = np.max([np.abs(np.linalg.norm(Z,ord='fro')**2 ) / normalisation_min,
+            np.abs(np.linalg.norm(Z,ord='fro')**2 ) / normalisation_max])
+
+        #Comapproxconst_min[n] = np.abs(np.linalg.norm(Z,ord='fro')**2 ) / np.abs(normalisation_min)
+        #Comapproxconst_max[n] = np.abs(np.linalg.norm(Z,ord='fro')**2 ) / np.abs(normalisation_max)
         den_const[n]=np.min([np.sqrt(np.abs(normalisation_min)),np.sqrt(np.abs(normalisation_max))])
 #        Fapproxconst[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisationapprox)
 #    Fapproxconst= np.sqrt(Fapproxconst)
