@@ -120,7 +120,7 @@ def main(directory,MaxOmega,Figures="On"):
         "URstore":URstore, "UIstore":UIstore, "URtildestore":URtildestore, "UN0store":UN0store, "QRstore":QRstore, "QIstore":QIstore, "QRtildestore":QRtildestore, \
          "QN0store":QN0store,"AnglestoreRIfmeasfullconstsortedmindiff": AnglestoreRIfmeasfullconstsortedmindiff,\
          "AnglestoreRIfmeasfullconstsortedmaxdiff": AnglestoreRIfmeasfullconstsortedmaxdiff,"AnglestoreRIcommeasfullconstsortedmindiff":AnglestoreRIcommeasfullconstsortedmindiff,\
-         "AnglestoreRIcommeasfullconstsortedmaxdiff":AnglestoreRIcommeasfullconstsortedmaxdiff}
+         "AnglestoreRIcommeasfullconstsortedmaxdiff":AnglestoreRIcommeasfullconstsortedmaxdiff,"Rstore":Rstore,"Istore":Istore,"Rtildestore":Rtildestore, "N0store":N0store}
 
     # Plots of minimal and maximal angles and compare with MaxDifference and MinDifference
     # if Figures=="On":
@@ -454,7 +454,7 @@ def main(directory,MaxOmega,Figures="On"):
         fig=plt.figure()
         plt.semilogx(Frequencies,MinAnglestoreN0R,label=r'$d_R({\cal N}^{(0)},{\cal R})$')
         plt.semilogx(Frequencies,dFMinAnglestoreN0R,label=r'$d_F({\cal N}^{(0)},{\cal R})$')
-        plt.semilogx(Frequencies,np.fmin(AnglestoreN0Rfmeasapprxconstsortedmaxdiff_min,AnglestoreN0Rfmeasapprxconstsortedmindiff_min),'x',label=r'Approx $d_R( {\cal N}^{(0)},{\cal R)$ from  $d_E( {\cal N}^{(0)},{\cal R})$ ')
+        plt.semilogx(Frequencies,np.fmin(AnglestoreN0Rfmeasapprxconstsortedmaxdiff_min,AnglestoreN0Rfmeasapprxconstsortedmindiff_min),'x',label=r'Approx $d_R( {\cal N}^{(0)},{\cal R})$ from  $d_E( {\cal N}^{(0)},{\cal R})$ ')
         plt.semilogx(Frequencies,np.fmin(AnglestoreN0Rcommeasapprxconstsortedmaxdiff_min,AnglestoreN0Rcommeasapprxconstsortedmindiff_min),'x',label=r'Approx $d_R( {\cal N}^{(0)},{\cal R})$ from  $d_C( {\cal N}^{(0)},{\cal R})$ ')
         plt.xlabel(r'$\omega$ [rad/s]')
         plt.ylabel(r'$\theta$ [rad]')
