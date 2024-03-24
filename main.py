@@ -27,13 +27,18 @@ from Commeasure import *
 #   Main script pass arguments of
 #   directory = Directory in which Tensors.csv, N0.csv and Frequencies.csv are stored
 #   MaxOmega = Maximum frequency to be considered
-def main(directory,MaxOmega,Figures="On"):
+def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
     print("Opening files from this path = ",directory)
 
     # Read data
-    TensorArray = np.genfromtxt(directory+'Tensors.csv', dtype=np.clongdouble, delimiter=', ')
-    N0 =          np.genfromtxt(directory+'N0.csv', dtype=np.longdouble, delimiter=',')
-    Frequencies = np.genfromtxt(directory+'Frequencies.csv', dtype=np.longdouble, delimiter=', ')
+    if FullRom=="Full":
+        TensorArray = np.genfromtxt(directory+'PODTensors.csv', dtype=complex, delimiter=', ')
+        N0 =          np.genfromtxt(directory+'N0.csv', dtype=float, delimiter=',')
+        Frequencies = np.genfromtxt(directory+'PODFrequencies.csv', dtype=float, delimiter=', ')
+    elif FullRom=="Rom":
+        TensorArray = np.genfromtxt(directory+'Tensors.csv', dtype=complex, delimiter=', ')
+        N0 =          np.genfromtxt(directory+'N0.csv', dtype=float, delimiter=',')
+        Frequencies = np.genfromtxt(directory+'Frequencies.csv', dtype=float, delimiter=', ')
 
     # Limit the values up to a perscribed MaxOmega
     N=len(Frequencies)
