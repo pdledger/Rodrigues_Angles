@@ -2,15 +2,15 @@ import numpy as np
 import time
 
 from Rodrigues import *
-def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, Frequencies, sorteigenvalues):
+def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, Frequencies, sorteigenvalues, Rstore, Istore):
     N = len(Frequencies)
     # Prepare sorted values by making a copy (note multiplicties don't change)
     SortedMultRstore=np.copy(MultRstore)
     SortedMultIstore=np.copy(MultIstore)
-    SortedURstore =np.copy(URstore)
-    SortedUIstore =np.copy(UIstore)
-    SortedQRstore = np.copy(QRstore)
-    SortedQIstore = np.copy(QIstore)
+    SortedURstore =np.zeros((N,3))
+    SortedUIstore =np.zeros((N,3))
+    SortedQRstore = np.zeros((N,3,3))
+    SortedQIstore = np.zeros((N,3,3))
     SortedKstore = np.zeros((N,3,3))
 
     Perm = np.array([[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]])
@@ -27,6 +27,9 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
     for n in range(N):
         QR = np.zeros((3,3),dtype=np.longdouble)
         QI = np.zeros((3,3),dtype=np.longdouble)
+        R = np.zeros((3,3),dtype=np.longdouble)
+        I = np.zeros((3,3),dtype=np.longdouble)
+
         uR =np.zeros(3,dtype=np.longdouble)
         uI = np.zeros(3,dtype=np.longdouble)
         for i in range(3):
@@ -36,34 +39,52 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
             for j in range(3):
                 QR[i,j] = QRstore[n,i,j]
                 QI[i,j] = QIstore[n,i,j]
+
+                R[i,j] = Rstore[n,i,j]
+                I[i,j] = Istore[n,i,j]
+
         Rmult = MultRstore[n]
         Imult = MultIstore[n]
 
         if sorteigenvalues=="MinDifference":
             # Find min combination
 
-            diffeig=1e10
+            MinMax_numerator=1e10
 
         elif sorteigenvalues=="MaxDifference":
             # Find max combination
-            diffeig=0.
+            MinMax_numerator=0.
 
         for m in range(6):
             mysum=0.
             ind=Perm[m,:]
+            puI=np.zeros(3,dtype=np.longdouble)
             for i in range(3):
-                mysum = mysum+ (uR[i]-uI[ind[i]-1])**2
+                puI[i]=uI[ind[i]-1]
+            #for i in range(3):
+            #    mysum = mysum+ (uR[i]-puI[i])**2
+            # Update critera to instead minimise or maximise the denominator in F!
+            uRI,VRI = np.linalg.eig((R-I).astype(dtype=float))
+            uRI=np.sort(uRI)
+            uRImuUI=np.sort(uR-puI)
+
+            numerator=0.
+            for i in range(3):
+                y=uRImuUI[i]
+                x=uRI[i]
+                # Rewrite (x^2-y^2) as (x+y)*(x-y)
+                numerator=numerator+(x+y)*(x-y)
+            numerator=abs(numerator)
+
+
             check = False
-            if sorteigenvalues=="MinDifference" and mysum < diffeig:
+            if sorteigenvalues=="MinDifference" and numerator < MinMax_numerator:
                 check = True
-            elif sorteigenvalues=="MaxDifference" and mysum > diffeig:
+            elif sorteigenvalues=="MaxDifference" and numerator > MinMax_numerator:
                 check = True
             if check==True:
-                diffeig = mysum
-                puI=np.zeros(3,dtype=np.longdouble)
-        #         #S=np.zeros((3,3))
-                for i in range(3):
-                    puI[i]=uI[ind[i]-1]
+                MinMax_numerator = numerator
+
         #
                 #uRopt=np.copy(uR)
                 #uIopt =np.copy(puI)

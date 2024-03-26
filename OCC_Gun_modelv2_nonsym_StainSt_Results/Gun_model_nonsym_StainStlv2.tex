@@ -186,9 +186,6 @@ $\begin{array}{cc}
 \caption{Toy gun with $\mu_r=20$ in the barrel. Normalised eddy current at $\omega = 7 \times 10^4 $ rad/s}
 \end{figure}
 
-
-
-\end{document}
 \clearpage
 {}
 \subsection{Barrel with $\mu_r=100$}
@@ -196,8 +193,14 @@ $\begin{array}{cc}
 \begin{figure}[h]
 \begin{center}
 $\begin{array}{cc}
-\includegraphics[width=0.5\textwidth]{mu100/RealEigenvalues.pdf} &
-\includegraphics[width=0.5\textwidth]{mu100/ImaginaryEigenvalues.pdf}
+%\includegraphics[width=0.5\textwidth]{mu100/RealEigenvalues.pdf}
+ \includegraphics[width=0.5\textwidth]{mu100/OCC_Gun_modelv2_nonsym_StainSt_eig_R_al_0.01_100,1_sig_1e6,1e8_ord_5.pdf} & 
+\includegraphics[width=0.5\textwidth]{mu100/OCC_Gun_modelv2_nonsym_StainSt_eig_I_al_0.01_100,1_sig_1e6,1e8_ord_5.pdf} \\
+\lambda_i({\mathcal R}) & \lambda_i ({\mathcal I}) \\
+ \includegraphics[width=0.5\textwidth]{mu100/OCC_Gun_modelv2_nonsym_StainSt_eig_Rtilde_al_0.01_100,1_sig_1e6,1e8_ord_5.pdf} & 
+\includegraphics[width=0.5\textwidth]{mu100/OCC_Gun_modelv2_nonsym_StainSt_eig_prox_al_0.01_100,1_sig_1e6,1e8_ord_5.pdf} \\
+%\includegraphics[width=0.5\textwidth]{mu100/ImaginaryEigenvalues.pdf}
+\lambda_i(\tilde{\mathcal R} ) &  | \lambda_i -\lambda_j|/|\lambda_i|  
 \end{array}$
 \end{center}
  \caption{Computed $\lambda_n(\tilde{\mathcal R})$ (left) and  $\lambda_n({\mathcal I})$ (right) for the toy gun with $\mu_r=100$ in the barrel. Notice that $\lambda_2({\mathcal I})= \lambda_3({\mathcal I})$ for $\omega \approx 4 \times 10^4$ rad/s,  $\lambda_1({\mathcal I}) = \lambda_2({\mathcal I})$ for  $\omega\approx 6\times 10^5$ rad/s and $\lambda_1(\tilde{\mathcal R})\approx \lambda_2(\tilde{\mathcal R})$ for $\omega\approx 2\times 10^3$ rad/s}

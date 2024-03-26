@@ -64,6 +64,11 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
             diffeig=diffeig+(uR[i]-uI[i])**2
         diffeig=diffeig
 
+        #print(Frequencies[n],"Combination of uR",uR)
+
+        #print(Frequencies[n],"Combination of uI",uI)
+
+
         #normalisationapprox=0
         #for j in range(3):
         #    normalisationapprox-=2*(uI[j]*uR[j])/np.sqrt(3)
@@ -114,6 +119,7 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
 
         Calc1= np.abs( numerator /normalisation_min)
         Calc2= np.abs( numerator /normalisation_max)
+        #print(numerator)
 
         #
         #
@@ -193,7 +199,7 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
     Fapproxconst_min=(Fapproxconst_min)**0.5
     Fapproxconst_max=(Fapproxconst_max)**0.5
 
-    print(Fapproxconst_min)
+    #print(Fapproxconst_min)
 
     return Fexactconst,Fapproxconst_min,Fapproxconst_max,den_const
     #Fapproxconst
