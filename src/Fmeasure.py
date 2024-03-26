@@ -79,52 +79,67 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
 
         normalisation_min = np.min(np.abs(evlist))
         normalisation_max = np.max(np.abs(evlist))
+        #normalisation =np.abs( np.trace(K@K@np.diag((uR))@np.diag((uI))))- np.abs(np.trace(K@np.diag((uR))@K@np.diag((uI))))
+        #normalisation_min = normalisation
+        #normalisation_max = normalisation
+
         Tol=1e-6
         #Fapproxconst_min[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_min)
         #Fapproxconst_max[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisation_max)
 
         # Idea to reduce cancellation errors
-        Sqrtnormalisation_min=np.sqrt(normalisation_min)
-        diffeig=0.
+        #Sqrtnormalisation_min=np.sqrt(normalisation_min)
+        #diffeig=0.
         #print(Frequencies[n],uR,uI)
-        for i in range(3):
-            diffeig=diffeig+(uR[i]/Sqrtnormalisation_min-uI[i]/Sqrtnormalisation_min)**2
-        diffeig=diffeig
+        # for i in range(3):
+        #     diffeig=diffeig+(uR[i]-uI[i])**2
+        # diffeig=diffeig
 
-        Norm=0.
-        for i in range(3):
-            Norm+=(R[i,i]/Sqrtnormalisation_min-I[i,i]/Sqrtnormalisation_min)**2
-        Norm=np.sqrt(Norm)
-        DiffeigSqrt=np.sqrt(diffeig)
+        # We can rewrite ||R -I||^2 = sum_i=1^3 lambda_i^2(R-I)
+        uRI,VRI = np.linalg.eig((R-I).astype(dtype=float))
+        uRI=np.sort(uRI)
+        uRImuUI=np.sort(uR-uI)
 
-        Offdiag=0.
+        numerator=0.
         for i in range(3):
-            for j in range(i+1,3):
-                Offdiag+=2*(R[i,j]/Sqrtnormalisation_min-I[i,j]/Sqrtnormalisation_min)**2
-        OffdiagNorm=Offdiag
+            y=uRImuUI[i]
+            x=uRI[i]
+            # Rewrite (x^2-y^2) as (x+y)*(x-y)
+            numerator=numerator+(x+y)*(x-y)
+        #if abs(numerator)/normalisation_min >=0.2**2:
+        #    normalisation_min=abs(numerator)/0.2**2
+        #if abs(numerator)/normalisation_max >=0.2**2:
+        #    normalisation_max=abs(numerator)/0.2**2
 
-        #numerator = np.abs( (Norm-DiffeigSqrt)*(Norm+DiffeigSqrt) )
-        Sqrtnormalisation_max=np.sqrt(normalisation_max)
-        diffeig=0.
-        #print(Frequencies[n],uR,uI)
-        for i in range(3):
-            diffeig=diffeig+(uR[i]/Sqrtnormalisation_max-uI[i]/Sqrtnormalisation_max)**2
-        diffeig=diffeig
 
-        Calc1= np.abs( (Norm-DiffeigSqrt)*(Norm+DiffeigSqrt) + OffdiagNorm )#/normalisation_min
-        Norm=0.
-        for i in range(3):
-            Norm+=(np.abs(R[i,i]/Sqrtnormalisation_max-I[i,i]/Sqrtnormalisation_max))**2
-        Norm=np.sqrt(Norm)
-        DiffeigSqrt=np.sqrt(diffeig)
+        Calc1= np.abs( numerator /normalisation_min)
+        Calc2= np.abs( numerator /normalisation_max)
 
-        Offdiag=0.
-        for i in range(3):
-            for j in range(i+1,3):
-                Offdiag+=2*(np.abs(R[i,j]/Sqrtnormalisation_max-I[i,j]/Sqrtnormalisation_max))**2
-        OffdiagNorm=Offdiag
-
-        Calc2= np.abs( (Norm-DiffeigSqrt)*(Norm+DiffeigSqrt)+ OffdiagNorm )
+        #
+        #
+        #
+        # #numerator = np.abs( (Norm-DiffeigSqrt)*(Norm+DiffeigSqrt) )
+        # Sqrtnormalisation_max=np.sqrt(normalisation_max)
+        # diffeig=0.
+        # #print(Frequencies[n],uR,uI)
+        # for i in range(3):
+        #     diffeig=diffeig+(uR[i]/Sqrtnormalisation_max-uI[i]/Sqrtnormalisation_max)**2
+        # diffeig=diffeig
+        #
+        # Calc1= np.abs( (Norm-DiffeigSqrt)*(Norm+DiffeigSqrt) + OffdiagNorm )/normalisation_min
+        # Norm=0.
+        # for i in range(3):
+        #     Norm+=(np.abs(R[i,i]/Sqrtnormalisation_max-I[i,i]/Sqrtnormalisation_max))**2
+        # Norm=np.sqrt(Norm)
+        # DiffeigSqrt=np.sqrt(diffeig)
+        #
+        # Offdiag=0.
+        # for i in range(3):
+        #     for j in range(i+1,3):
+        #         Offdiag+=2*(np.abs(R[i,j]/Sqrtnormalisation_max-I[i,j]/Sqrtnormalisation_max))**2
+        # OffdiagNorm=Offdiag
+        #
+        # Calc2= np.abs( (Norm-DiffeigSqrt)*(Norm+DiffeigSqrt)+ OffdiagNorm )
 
         Fapproxconst_min[n] = np.min([ Calc1,
                                         Calc2])
@@ -173,8 +188,10 @@ def Fmeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, Sorted
 #
 #        Fapproxconst[n] = np.abs(np.linalg.norm(R-I,ord='fro')**2 - diffeig) / np.abs(normalisationapprox)
 #    Fapproxconst= np.sqrt(Fapproxconst)
-    Fapproxconst_min=np.sqrt(Fapproxconst_min)
-    Fapproxconst_max=np.sqrt(Fapproxconst_max)
+#    Fapproxconst_min=np.sqrt(Fapproxconst_min)
+#    Fapproxconst_max=np.sqrt(Fapproxconst_max)
+    Fapproxconst_min=(Fapproxconst_min)**0.5
+    Fapproxconst_max=(Fapproxconst_max)**0.5
 
     print(Fapproxconst_min)
 
