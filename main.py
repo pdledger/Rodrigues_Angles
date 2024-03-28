@@ -92,6 +92,11 @@ def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
     #Obtain Com-meauses (approx and exact constant)
     AnglestoreRIcommeasfullconstsortedmindiff, AnglestoreRIcommeasapprxconstsortedmindiff_min,AnglestoreRIcommeasapprxconstsortedmindiff_max, RIcommeapprx_den_const_min = Commeasure(sorteigenvalues,SortedURstore, SortedUIstore, SortedQRstore, SortedQIstore, SortedKstore, Rstore,Istore, Frequencies)
 
+    kthetavec=np.zeros((N,3))
+    for n in range(N):
+        kthetavec[n,0] = -SortedKstore[n,1,2]*MinAnglestoreRI[n]
+        kthetavec[n,1] = SortedKstore[n,0,2]*MinAnglestoreRI[n]
+        kthetavec[n,2] = -SortedKstore[n,0,1]*MinAnglestoreRI[n]
     if Figures=="On":
         fig=plt.figure()
         plt.semilogx(Frequencies,MinAnglestoreRI,label=r'$d_R({\cal R},{\cal I})$')
@@ -108,11 +113,6 @@ def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
 
 
         # Plot of vairation of |theta| kvec with omgea
-        kthetavec=np.zeros((N,3))
-        for n in range(N):
-            kthetavec[n,0] = -SortedKstore[n,1,2]*MinAnglestoreRI[n]
-            kthetavec[n,1] = SortedKstore[n,0,2]*MinAnglestoreRI[n]
-            kthetavec[n,2] = -SortedKstore[n,0,1]*MinAnglestoreRI[n]
         fig=plt.figure()
         plt.semilogx(Frequencies,abs(kthetavec[:,0]),label=r'$|\theta k_1|$')
         plt.semilogx(Frequencies,abs(kthetavec[:,1]),label=r'$|\theta k_2|$')
@@ -232,6 +232,11 @@ def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
     #AnglestoreRtildeIfmeasfullconstsortedmindiff, AnglestoreRtildeIfmeasapprxconstsortedmindiff = Fmeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
     AnglestoreRtildeIcommeasfullconstsortedmindiff, AnglestoreRtildeIcommeasapprxconstsortedmindiff_min,AnglestoreRtildeIcommeasapprxconstsortedmindiff_max, RtildeIcommeapprx_den_const_min = Commeasure(sorteigenvalues,SortedURtildestore, SortedUIstore, SortedQRtildestore, SortedQIstore, SortedKstore, Rtildestore,Istore, Frequencies)
 
+    kthetavec=np.zeros((N,3))
+    for n in range(N):
+        kthetavec[n,0] = -SortedKstore[n,1,2]*MinAnglestoreRtildeI[n]
+        kthetavec[n,1] = SortedKstore[n,0,2]*MinAnglestoreRtildeI[n]
+        kthetavec[n,2] = -SortedKstore[n,0,1]*MinAnglestoreRtildeI[n]
 
     if Figures=="On":
         fig=plt.figure()
@@ -245,11 +250,6 @@ def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
         plt.show()
 
         # Plot of vairation of |theta| kvec with omgea
-        kthetavec=np.zeros((N,3))
-        for n in range(N):
-            kthetavec[n,0] = -SortedKstore[n,1,2]*MinAnglestoreRtildeI[n]
-            kthetavec[n,1] = SortedKstore[n,0,2]*MinAnglestoreRtildeI[n]
-            kthetavec[n,2] = -SortedKstore[n,0,1]*MinAnglestoreRtildeI[n]
         fig=plt.figure()
         plt.semilogx(Frequencies,abs(kthetavec[:,0]),label=r'$|\theta k_1 |$')
         plt.semilogx(Frequencies,abs(kthetavec[:,1]),label=r'$|\theta k_2|$')
@@ -366,6 +366,11 @@ def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
     #Obtain com meauses (approx and exact constant)
     AnglestoreN0Icommeasfullconstsortedmindiff, AnglestoreN0Icommeasapprxconstsortedmindiff_min,AnglestoreN0Icommeasapprxconstsortedmindiff_max, N0Icommeapprx_den_const_min= Commeasure(sorteigenvalues,SortedUN0store, SortedUIstore, SortedQN0store, SortedQIstore, SortedKstore, N0store,Istore, Frequencies)
 
+    kthetavec=np.zeros((N,3))
+    for n in range(N):
+        kthetavec[n,0] = -SortedKstore[n,1,2]*MinAnglestoreN0I[n]
+        kthetavec[n,1] = SortedKstore[n,0,2]*MinAnglestoreN0I[n]
+        kthetavec[n,2] = -SortedKstore[n,0,1]*MinAnglestoreN0I[n]
 
     if Figures=="On":
         fig=plt.figure()
@@ -379,11 +384,6 @@ def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
         plt.show()
 
         # Plot of vairation of |theta| kvec with omgea
-        kthetavec=np.zeros((N,3))
-        for n in range(N):
-            kthetavec[n,0] = -SortedKstore[n,1,2]*MinAnglestoreN0I[n]
-            kthetavec[n,1] = SortedKstore[n,0,2]*MinAnglestoreN0I[n]
-            kthetavec[n,2] = -SortedKstore[n,0,1]*MinAnglestoreN0I[n]
         fig=plt.figure()
         plt.semilogx(Frequencies,abs(kthetavec[:,0]),label=r'$|\theta k_1|$')
         plt.semilogx(Frequencies,abs(kthetavec[:,1]),label=r'$|\theta k_2|$')
@@ -500,6 +500,11 @@ def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
     #Obtain com meauses (approx and exact constant)
     AnglestoreN0Rcommeasfullconstsortedmindiff, AnglestoreN0Rcommeasapprxconstsortedmindiff_min,AnglestoreN0Rcommeasapprxconstsortedmindiff_max, N0Rcommeapprx_den_const_min= Commeasure(sorteigenvalues,SortedUN0store, SortedURstore, SortedQN0store, SortedQRstore, SortedKstore, N0store,Rstore, Frequencies)
 
+    kthetavec=np.zeros((N,3))
+    for n in range(N):
+        kthetavec[n,0] = -SortedKstore[n,1,2]*MinAnglestoreN0R[n]
+        kthetavec[n,1] = SortedKstore[n,0,2]*MinAnglestoreN0R[n]
+        kthetavec[n,2] = -SortedKstore[n,0,1]*MinAnglestoreN0R[n]
 
     if Figures=="On":
         fig=plt.figure()
@@ -513,11 +518,6 @@ def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
         plt.show()
 
         # Plot of vairation of |theta| kvec with omgea
-        kthetavec=np.zeros((N,3))
-        for n in range(N):
-            kthetavec[n,0] = -SortedKstore[n,1,2]*MinAnglestoreN0R[n]
-            kthetavec[n,1] = SortedKstore[n,0,2]*MinAnglestoreN0R[n]
-            kthetavec[n,2] = -SortedKstore[n,0,1]*MinAnglestoreN0R[n]
         fig=plt.figure()
         plt.semilogx(Frequencies,abs(kthetavec[:,0]),label=r'$|\theta k_1|$')
         plt.semilogx(Frequencies,abs(kthetavec[:,1]),label=r'$|\theta k_2|$')
@@ -642,6 +642,11 @@ def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
     #Obtain com meauses (approx and exact constant)
     AnglestoreN0Rtildecommeasfullconstsortedmindiff, AnglestoreN0Rtildecommeasapprxconstsortedmindiff_min,AnglestoreN0Rtildecommeasapprxconstsortedmindiff_max, N0Rtildecommeapprx_den_const_min= Commeasure(sorteigenvalues,SortedUN0store, SortedURtildestore, SortedQN0store, SortedQRtildestore, SortedKstore, N0store,Rtildestore, Frequencies)
 
+    kthetavec=np.zeros((N,3))
+    for n in range(N):
+        kthetavec[n,0] = -SortedKstore[n,1,2]*MinAnglestoreN0Rtilde[n]
+        kthetavec[n,1] = SortedKstore[n,0,2]*MinAnglestoreN0Rtilde[n]
+        kthetavec[n,2] = -SortedKstore[n,0,1]*MinAnglestoreN0Rtilde[n]
 
     if Figures=="On":
         fig=plt.figure()
@@ -655,11 +660,6 @@ def main(directory,MaxOmega,Figures="On",FullRom="Rom"):
         plt.show()
 
         # Plot of vairation of |theta| kvec with omgea
-        kthetavec=np.zeros((N,3))
-        for n in range(N):
-            kthetavec[n,0] = -SortedKstore[n,1,2]*MinAnglestoreN0Rtilde[n]
-            kthetavec[n,1] = SortedKstore[n,0,2]*MinAnglestoreN0Rtilde[n]
-            kthetavec[n,2] = -SortedKstore[n,0,1]*MinAnglestoreN0Rtilde[n]
         fig=plt.figure()
         plt.semilogx(Frequencies,abs(kthetavec[:,0]),label=r'$|\theta k_1|$')
         plt.semilogx(Frequencies,abs(kthetavec[:,1]),label=r'$|\theta k_2|$')
