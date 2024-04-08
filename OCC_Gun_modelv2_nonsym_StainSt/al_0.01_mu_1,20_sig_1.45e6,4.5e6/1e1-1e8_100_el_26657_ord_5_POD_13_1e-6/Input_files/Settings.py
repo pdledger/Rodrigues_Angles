@@ -63,7 +63,7 @@ def AdditionalOutputs():
     #(boolean)
 
     #Produce a vtk outputfile for the eddy-currents (outputs a large file!)
-    vtk_output = False
+    vtk_output = True #False
     #(boolean) do you want to produce a vtk file of the eddy currents in the
     #object (single frequency only)
 
