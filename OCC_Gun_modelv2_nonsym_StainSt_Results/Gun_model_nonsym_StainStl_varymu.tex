@@ -99,29 +99,29 @@
 \date{5th April 2024}
 \maketitle
 
-Barrel has $\sigma_* = 1.45\times 10^6$ S/m and $\mu_r$ is varied ($\mu_r=100$ corresponds to carbon steel) and the receiver has $4.5 \times 10^6$ S/m and $\mu_r=1$ and is a stainless steel.  The barrel is hollow with a cap at one end.  The length of the barrel is 0.2 m, outer and inner radii of the barrel are 0.02 m and 0.01m, respectively. The box representing the receiver is 0.08 m $\times$ 0.01 m $\times$ 0.15 m.  A mesh of 21,132 unstructured tetrahedra, 5,525 prisms and elements of order $p=0,1,2,3,4,5$ are considered. The prisms are chosen to be used as boundary layers in the barrel, which has a smaller skin depth. 
-
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=0.5\textwidth]{Gun_modelv2_nonsym_StainSt.png}
-\end{center}
-\caption{Illustration of the toy gun. Barrel has $\sigma_* = 1.45\times 10^6$ S/m and $\mu_r$ is varied ($\mu_r=100$ corresponds to carbon steel) and the receiver has $4.5 \times 10^6$ S/m and $\mu_r$ and is a non-magnetic stainless steel.}
-\end{figure}
-
-When the eigenvalue curves  cross each other then this indicates the presence of eigenvalues with algebraic multiplicity greater than one.  The associated eigenvectors for an eigenvalue with algebraic multiplicity two 
- can be arbitrarily chosen as any two vectors that form a basis for the two-dimensional eigenspace.  In numerical computations, the computation of eigenvectors associated with eigenvalues $\lambda_n , \lambda_m$ is problematic when $\lambda_n \to \lambda_m$. 
-
- Angles between the computed eigenvectors using the metrics $d_R$ and $d_F$ are considered and  the approximations $d_E$ and $d_C$ that do not require knowledge of the eigenvectors. Notice the smooth transition of   $d_R$ and $d_F$ in the regions where the eigenvalues are repeated  and the associated {\bf peaks}.
-While we know there are issues with the eigenvectors of repeated eigenvalues, the peaks are interesting as there is a {\bf smooth transition to them}.
-  While $d_E$ and $d_C$ do not capture the peaks well, particularly $d_E$,  the normalising constant involved in the computation do identify the peaks.
-  
-  Note that $d_E$ and $d_C$ do capture the behaviour of $d_R$ and $d_F$ well for other objects when there are no peaks.
-
-
-
-\clearpage
+%Barrel has $\sigma_* = 1.45\times 10^6$ S/m and $\mu_r$ is varied ($\mu_r=100$ corresponds to carbon steel) and the receiver has $4.5 \times 10^6$ S/m and $\mu_r=1$ and is a stainless steel.  The barrel is hollow with a cap at one end.  The length of the barrel is 0.2 m, outer and inner radii of the barrel are 0.02 m and 0.01m, respectively. The box representing the receiver is 0.08 m $\times$ 0.01 m $\times$ 0.15 m.  A mesh of 21,132 unstructured tetrahedra, 5,525 prisms and elements of order $p=0,1,2,3,4,5$ are considered. The prisms are chosen to be used as boundary layers in the barrel, which has a smaller skin depth. 
+%
+%\begin{figure}[h]
+%\begin{center}
+%\includegraphics[width=0.5\textwidth]{Gun_modelv2_nonsym_StainSt.png}
+%\end{center}
+%\caption{Illustration of the toy gun. Barrel has $\sigma_* = 1.45\times 10^6$ S/m and $\mu_r$ is varied ($\mu_r=100$ corresponds to carbon steel) and the receiver has $4.5 \times 10^6$ S/m and $\mu_r$ and is a non-magnetic stainless steel.}
+%\end{figure}
+%
+%When the eigenvalue curves  cross each other then this indicates the presence of eigenvalues with algebraic multiplicity greater than one.  The associated eigenvectors for an eigenvalue with algebraic multiplicity two 
+% can be arbitrarily chosen as any two vectors that form a basis for the two-dimensional eigenspace.  In numerical computations, the computation of eigenvectors associated with eigenvalues $\lambda_n , \lambda_m$ is problematic when $\lambda_n \to \lambda_m$. 
+%
+% Angles between the computed eigenvectors using the metrics $d_R$ and $d_F$ are considered and  the approximations $d_E$ and $d_C$ that do not require knowledge of the eigenvectors. Notice the smooth transition of   $d_R$ and $d_F$ in the regions where the eigenvalues are repeated  and the associated {\bf peaks}.
+%While we know there are issues with the eigenvectors of repeated eigenvalues, the peaks are interesting as there is a {\bf smooth transition to them}.
+%  While $d_E$ and $d_C$ do not capture the peaks well, particularly $d_E$,  the normalising constant involved in the computation do identify the peaks.
+%  
+%  Note that $d_E$ and $d_C$ do capture the behaviour of $d_R$ and $d_F$ well for other objects when there are no peaks.
+%
+%
+%
+%\clearpage
 {}
-\subsection{Barrel with $\mu_r=20$}
+%\subsection{Barrel with $\mu_r=20$}
 
 \begin{figure}[h]
 \begin{center}
@@ -136,7 +136,7 @@ $\begin{array}{ccc}
 \end{figure}
 
 
-\subsection{Barrel with $\mu_r=40$}
+%\subsection{Barrel with $\mu_r=40$}
 
 \begin{figure}[h]
 \begin{center}
@@ -150,7 +150,7 @@ $\begin{array}{ccc}
 \caption{Toy gun with $\mu_r=40$ in the barrel.  }
 \end{figure}
 
-\subsection{Barrel with $\mu_r=80$}
+%\subsection{Barrel with $\mu_r=80$}
 
 \begin{figure}[h]
 \begin{center}
@@ -164,7 +164,7 @@ $\begin{array}{ccc}
 \caption{Toy gun with $\mu_r=80$ in the barrel.  }
 \end{figure}
 
-\subsection{Barrel with $\mu_r=100$}
+%\subsection{Barrel with $\mu_r=100$}
 
 \begin{figure}[h]
 \begin{center}
