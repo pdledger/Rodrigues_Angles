@@ -106,7 +106,9 @@ def SortEigenValues(MultRstore, MultIstore, URstore, UIstore, QRstore, QIstore, 
                             QRordsign[:,j] = sign[kk,j]*QR[:,j]
         #
         #
+                    #print (np.transpose(QRordsign)@QIordsign)
                     if np.linalg.det(np.transpose(QRordsign)@QIordsign)> 0:
+
         #         # Only do for valid rotation matrices with det(R) + ve (=1)
                         theta, K, Tvec= Rodrigues(QRordsign, QIordsign)
                         if theta < thetaopt:
