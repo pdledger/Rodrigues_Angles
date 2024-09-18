@@ -34,23 +34,6 @@ def MinMaxthetafromQRQI(Frequencies,QRstore,QIstore,URstore, UIstore,MultRstore,
                 QI[i,j] = QIstore[n,i,j]
         Rmult = MultRstore[n]
         Imult = MultIstore[n]
-
-
-        # New intervention rather than use Rmult and Imult check if an eigenvalue is close to another eigenvalue
-        # We want to check how close they are.
-        # If they are not close, we can just do as before.
-        # If two are close then loop over possible combinations to find the minimum.
-        #tol=1e-3
-        #Rnewmult=1
-        #for i in range(3):
-        #    for j in range(i+1,3):
-        #        if np.abs(uR[i]-uR[j])/np.abs(uR[i]) < tol:
-        #            # uR[i] and uR[j] are the same to within the tolerance
-        #            uR
-
-
-
-
         #print(Rmult,Imult)
         if Rmult != Imult :
             print("error different multiplicties for R and I",Rmult,Imult)

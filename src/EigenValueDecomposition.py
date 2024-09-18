@@ -1,6 +1,8 @@
 import numpy as np
 import scipy
 import jax
+import sympy as sym
+import time
 
 def EigenValueDecomposition(N0,TensorArray,Frequencies):
 
@@ -20,8 +22,9 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
     QRtildestore=np.zeros((N,3,3),dtype=np.longdouble)
     tol=1e-4
     for n in range(N):
+        print("doing ",n,"of ",N)
         Mlist = TensorArray[n,:]
-        Mten = np.array([[Mlist[0], Mlist[1], Mlist[2]],[Mlist[3], Mlist[4], Mlist[5]],[Mlist[6], Mlist[7], Mlist[8]]],dtype=np.clongdouble)
+        Mten = np.array([[Mlist[0], Mlist[1], Mlist[2]],[Mlist[3], Mlist[4], Mlist[5]],[Mlist[6], Mlist[7], Mlist[8]]])#,dtype=np.clongdouble)
         Rtilde = np.real(Mten)#+np.diag(np.random.rand(3))*tol
         I = np.imag(Mten)#+np.diag(np.random.rand(3))*tol
         R = (np.real(Mten)-N0)
@@ -38,19 +41,108 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         #uRtilde=np.sqrt(uRtilde)
         #uI=np.sqrt(uI)
         #uN0=np.sqrt(uN0)
-
+        print("R")
         uR,VR = np.linalg.eig(R.astype(dtype=float))#jax.numpy.linalg.eig(R)
         uR=np.real(uR)
         VR=np.real(VR)
+        myR=R.astype(dtype=float)
+        # Create Sympy matrix
+        Rsym=sym.Matrix([[myR[0,0],myR[0,1],myR[0,2]],[myR[1,0],myR[1,1],myR[1,2]],[myR[2,0],myR[2,1],myR[2,2]]]).applyfunc(sym.nsimplify)
+        Rsym=(Rsym+Rsym.T)/2
+        #print(Rsym)
+        out=Rsym.eigenvects()
+        #print(out)
+        for i in range(3):
+            #(eigenval, multiplicity, eigenspace)
+            #print(out[i][0],sym.N(sym.re(out[i][0])))
+            uR[i]=sym.N(sym.re(out[i][0]))
+            if out[i][1]> 1:
+                print("multiplicity > 1")
+            #print(out[i][2][0])
+            #print((sym.N(out[i][2][0])))
+            #print(sym.re(sym.N(out[i][2][0])))
+            #print(np.array(sym.re(sym.N(out[i][2][0]))))
+            VR[:,i]=(np.array(sym.re(sym.N(out[i][2][0])))).astype(np.float64)[:,0]
+        # make orthonormal
+        VR,dum=np.linalg.qr(VR)
+
+
+        # for i in range(3):
+        #     out=scipy.linalg.null_space(R.astype(dtype=float)-uR[i]*np.eye(3))
+        #     n,m=np.shape(out)
+        #     if m > 1:
+        #         print("Mult more than 1 VR",m)
+        #     elif m==1:
+        #         VR[:,i]=out[:,0]/np.linalg.norm(out[:,0])
+        #     else:
+        #         print("Warning VR")
+
+
         #print(uR,VR)
+        print("Rtilde")
         uRtilde,VRtilde = np.linalg.eig(Rtilde.astype(dtype=float))#jax.numpy.linalg.eig(Rtilde)
         uRtilde=np.real(uRtilde)
         VRtilde=np.real(VRtilde)
+        #print(uRtilde,Rtilde)
+        # for i in range(3):
+        #     out=scipy.linalg.null_space(Rtilde.astype(dtype=float)-uRtilde[i]*np.eye(3))
+        #     n,m=np.shape(out)
+        #     if m > 1:
+        #         print("Mult more than 1 VR",m)
+        #     elif m==1:
+        #         VRtilde[:,i]=out[:,0]/np.linalg.norm(out[:,0])
+        #     else:
+        #         print("Warning VRtilde")
+        # myR=Rtilde.astype(dtype=float)
+        # Rtildesym=sym.Matrix([[myR[0,0],myR[0,1],myR[0,2]],[myR[1,0],myR[1,1],myR[1,2]],[myR[2,0],myR[2,1],myR[2,2]]]).applyfunc(sym.nsimplify)
+        # Rtildesym=(Rtildesym+Rtildesym.T)/2
+        # out=Rtildesym.eigenvects()
+        # for i in range(3):
+        #     #(eigenval, multiplicity, eigenspace)
+        #     #uRtilde[i]=out[i][0]
+        #     uRtilde[i]=sym.N(sym.re(out[i][0]))
+        #     if out[i][1]> 1:
+        #         print("multiplicity > 1")
+        #     #VRtilde[:,i]=np.array(out[i][2]).astype(np.float64)[0,:,0]
+        #     VRtilde[:,i]=(np.array(sym.re(sym.N(out[i][2][0])))).astype(np.float64)[:,0]
+        # # make orthonormal
+        # VRtilde,dum=np.linalg.qr(VRtilde)
+
+        print("I")
         uI,VI = np.linalg.eig(I.astype(dtype=float))#jax.numpy.linalg.eig(I)
         uI=np.real(uI)
         VI=np.real(VI)
+#        for i in range(3):
+#            out=scipy.linalg.null_space(I.astype(dtype=float)-uI[i]*np.eye(3))
+#            n,m=np.shape(out)
+#            if m > 1:
+#                print("Mult more than 1 VR",m)
+#            elif m==1:
+#                print(out[:,0])
+#                VI[:,i]=out[:,0]/np.linalg.norm(out[:,0])
+#            else:
+#                print("Warning VI")
+
+        myI=I.astype(dtype=float)
+        Isym=sym.Matrix([[myI[0,0],myI[0,1],myI[0,2]],[myI[1,0],myI[1,1],myI[1,2]],[myI[2,0],myI[2,1],myI[2,2]]]).applyfunc(sym.nsimplify)
+        Isym=(Isym+Isym)/2
+        out=Isym.eigenvects()
+        for i in range(3):
+            #(eigenval, multiplicity, eigenspace)
+            #uI[i]=out[i][0]
+            uI[i]=sym.N(sym.re(out[i][0]))
+            if out[i][1]> 1:
+                print("multiplicity > 1")
+            #VI[:,i]=np.array(out[i][2]).astype(np.float64)[0,:,0]
+            VI[:,i]=(np.array(sym.re(sym.N(out[i][2][0])))).astype(np.float64)[:,0]
+        # make orthonormal
+        VI,dum=np.linalg.qr(VI)
+
+
+
+
         #print(uI)
-        uN0,VN0 = np.linalg.eig(N0.astype(dtype=float))#jax.numpy.linalg.eig(N0)
+        uN0,VN0 = np.linalg.eigh(N0.astype(dtype=float))#jax.numpy.linalg.eig(N0)
         uN0=np.real(uN0)
         VN0=np.real(VN0)
         #uR=np.abs(uR)
