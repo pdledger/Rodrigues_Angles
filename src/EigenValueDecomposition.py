@@ -42,29 +42,29 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         #uI=np.sqrt(uI)
         #uN0=np.sqrt(uN0)
         print("R")
-        uR,VR = np.linalg.eig(R.astype(dtype=float))#jax.numpy.linalg.eig(R)
+        uR,VR = np.linalg.eigh(R.astype(dtype=float))#jax.numpy.linalg.eig(R)
         uR=np.real(uR)
         VR=np.real(VR)
-        myR=R.astype(dtype=float)
-        # Create Sympy matrix
-        Rsym=sym.Matrix([[myR[0,0],myR[0,1],myR[0,2]],[myR[1,0],myR[1,1],myR[1,2]],[myR[2,0],myR[2,1],myR[2,2]]]).applyfunc(sym.nsimplify)
-        Rsym=(Rsym+Rsym.T)/2
-        #print(Rsym)
-        out=Rsym.eigenvects()
-        #print(out)
-        for i in range(3):
-            #(eigenval, multiplicity, eigenspace)
-            #print(out[i][0],sym.N(sym.re(out[i][0])))
-            uR[i]=sym.N(sym.re(out[i][0]))
-            if out[i][1]> 1:
-                print("multiplicity > 1")
-            #print(out[i][2][0])
-            #print((sym.N(out[i][2][0])))
-            #print(sym.re(sym.N(out[i][2][0])))
-            #print(np.array(sym.re(sym.N(out[i][2][0]))))
-            VR[:,i]=(np.array(sym.re(sym.N(out[i][2][0])))).astype(np.float64)[:,0]
-        # make orthonormal
-        VR,dum=np.linalg.qr(VR)
+        # myR=R.astype(dtype=float)
+        # # Create Sympy matrix
+        # Rsym=sym.Matrix([[myR[0,0],myR[0,1],myR[0,2]],[myR[1,0],myR[1,1],myR[1,2]],[myR[2,0],myR[2,1],myR[2,2]]]).applyfunc(sym.nsimplify)
+        # Rsym=(Rsym+Rsym.T)/2
+        # #print(Rsym)
+        # out=Rsym.eigenvects()
+        # #print(out)
+        # for i in range(3):
+        #     #(eigenval, multiplicity, eigenspace)
+        #     #print(out[i][0],sym.N(sym.re(out[i][0])))
+        #     uR[i]=sym.N(sym.re(out[i][0]))
+        #     if out[i][1]> 1:
+        #         print("multiplicity > 1")
+        #     #print(out[i][2][0])
+        #     #print((sym.N(out[i][2][0])))
+        #     #print(sym.re(sym.N(out[i][2][0])))
+        #     #print(np.array(sym.re(sym.N(out[i][2][0]))))
+        #     VR[:,i]=(np.array(sym.re(sym.N(out[i][2][0])))).astype(np.float64)[:,0]
+        # # make orthonormal
+        # VR,dum=np.linalg.qr(VR)
 
 
         # for i in range(3):
@@ -80,7 +80,7 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
 
         #print(uR,VR)
         print("Rtilde")
-        uRtilde,VRtilde = np.linalg.eig(Rtilde.astype(dtype=float))#jax.numpy.linalg.eig(Rtilde)
+        uRtilde,VRtilde = np.linalg.eigh(Rtilde.astype(dtype=float))#jax.numpy.linalg.eig(Rtilde)
         uRtilde=np.real(uRtilde)
         VRtilde=np.real(VRtilde)
         #print(uRtilde,Rtilde)
@@ -109,7 +109,7 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         # VRtilde,dum=np.linalg.qr(VRtilde)
 
         print("I")
-        uI,VI = np.linalg.eig(I.astype(dtype=float))#jax.numpy.linalg.eig(I)
+        uI,VI = np.linalg.eigh(I.astype(dtype=float))#jax.numpy.linalg.eig(I)
         uI=np.real(uI)
         VI=np.real(VI)
 #        for i in range(3):
@@ -123,20 +123,20 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
 #            else:
 #                print("Warning VI")
 
-        myI=I.astype(dtype=float)
-        Isym=sym.Matrix([[myI[0,0],myI[0,1],myI[0,2]],[myI[1,0],myI[1,1],myI[1,2]],[myI[2,0],myI[2,1],myI[2,2]]]).applyfunc(sym.nsimplify)
-        Isym=(Isym+Isym)/2
-        out=Isym.eigenvects()
-        for i in range(3):
-            #(eigenval, multiplicity, eigenspace)
-            #uI[i]=out[i][0]
-            uI[i]=sym.N(sym.re(out[i][0]))
-            if out[i][1]> 1:
-                print("multiplicity > 1")
-            #VI[:,i]=np.array(out[i][2]).astype(np.float64)[0,:,0]
-            VI[:,i]=(np.array(sym.re(sym.N(out[i][2][0])))).astype(np.float64)[:,0]
-        # make orthonormal
-        VI,dum=np.linalg.qr(VI)
+        # myI=I.astype(dtype=float)
+        # Isym=sym.Matrix([[myI[0,0],myI[0,1],myI[0,2]],[myI[1,0],myI[1,1],myI[1,2]],[myI[2,0],myI[2,1],myI[2,2]]]).applyfunc(sym.nsimplify)
+        # Isym=(Isym+Isym)/2
+        # out=Isym.eigenvects()
+        # for i in range(3):
+        #     #(eigenval, multiplicity, eigenspace)
+        #     #uI[i]=out[i][0]
+        #     uI[i]=sym.N(sym.re(out[i][0]))
+        #     if out[i][1]> 1:
+        #         print("multiplicity > 1")
+        #     #VI[:,i]=np.array(out[i][2]).astype(np.float64)[0,:,0]
+        #     VI[:,i]=(np.array(sym.re(sym.N(out[i][2][0])))).astype(np.float64)[:,0]
+        # # make orthonormal
+        # VI,dum=np.linalg.qr(VI)
 
 
 
@@ -185,10 +185,21 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
     #  case 1 : 1 , 1, 1 if they are distinct
     #  case 2 : or 1, 2
     #  case 3 : or 3
-        MultR = CheckMult(uR,R.astype(dtype=float))
-        MultI = CheckMult(uI,I.astype(dtype=float))
-        MultRtilde = CheckMult(uRtilde,Rtilde.astype(dtype=float))
-        MultN0 = CheckMult(uN0,N0.astype(dtype=float))
+
+
+
+        MultR = 1#CheckMult(uR,R.astype(dtype=float))
+        MultI = 1#CheckMult(uI,I.astype(dtype=float))
+        MultRtilde = 1#CheckMult(uRtilde,Rtilde.astype(dtype=float))
+        MultN0 = 1#CheckMult(uN0,N0.astype(dtype=float))
+
+        # check ordering of eigenvalues and recompute if two are close
+        uR,VR=checkeigen(R,uR,VR)
+        uRtilde,VRtilde=checkeigen(Rtilde,uRtilde,VRtilde)
+        uI,VI=checkeigen(I,uI,VI)
+        uN0,VN0=checkeigen(N0,uN0,VN0)
+
+
 
 
         #if n > 5 and n < 8:
@@ -239,3 +250,142 @@ def CheckMult(u,Tensor):
     #                     mult =3
 
     return mult
+
+
+def checkeigen(M,u,Q):
+    order=np.argsort(u)
+    # Order in ascending order
+    u=u[order]
+    Q=Q[:,order]
+    mult=-1*np.ones(3)
+    tag=0
+    tol=1e-3
+    for i in range(3):
+        for j in range(i+1,3):
+            if np.abs(u[i]-u[j])/np.abs(u[i]) < tol:
+                mult[i]=j
+                mult[j]=i
+                tag=1
+    if tag==1:
+        #print(u)
+        #print(Q)
+        for i in range(3):
+            if mult[i]==-1:
+                break
+        # i contains a first non multuple eigenvalue
+        u1=u[i]
+        if i==0:
+            u2=u[1]
+            u3=u[2]
+        elif i==1:
+            u2=u[0]
+            u3=u[2]
+        else:
+            u2=u[0]
+            u3=u[1]
+
+        q1=getevectors(M,u1)
+        U,V=orthogcomp(q1)
+        q2=computeeigen2(q1,U,V,M,u1,u2)
+        q3=np.cross(q1,q2)
+        #q2,q3=getevectorsclose(q1)
+        Q=np.zeros((3,3))
+        Q[:,0]=q1[:]
+        Q[:,1]=q2[:]
+        Q[:,2]=q3[:]
+        u=np.array([u1,u2,u3])
+        #print(Q)
+        #time.sleep(10)
+    return u,Q
+#https://www.geometrictools.com/Documentation/RobustEigenSymmetric3x3.pdf
+def getevectors(A,eigenvalue):
+    Ameigla=A-eigenvalue*np.eye(3)
+
+    r0=Ameigla[0,:]
+    r1=Ameigla[1,:]
+    r2=Ameigla[2,:]
+    r0xr1=np.cross(r0,r1)
+    r0xr2=np.cross(r0,r2)
+    r1xr2=np.cross(r1,r2)
+
+    d0=np.dot(r0xr1,r0xr1)
+    d1=np.dot(r0xr2,r0xr2)
+    d2=np.dot(r1xr2,r1xr2)
+
+    dmax=d0
+    imax=0
+    if d1 > dmax:
+        dmax=d1
+        imax=1
+    if d2 > dmax:
+        imax=2
+    if imax==0:
+        eigenvector=r0xr1/np.sqrt(d0)
+    elif imax==1:
+        eigenvector=r0xr2/np.sqrt(d1)
+    else:
+        eigenvector=r1xr2/np.sqrt(d2)
+    return eigenvector
+
+
+# def getevectorsclose(U):
+#     if np.abs(U[0]) > np.abs(U[1]):
+#         #The component of max abs value is 0 or 2
+#         invlength=1/np.sqrt(U[0]*U[0]+U[2]*U[2])
+#         V=np.array([-U[2]*invlength,0,U[0]*invlength])
+#     else:
+#         #The component of max abs value is 1 or 2
+#         invlength=1/np.sqrt(U[1]*U[1]+U[2]*U[2])
+#         V=np.array([0,U[2]*invlength,-U[1]*invlength])
+#     W=np.cross(U,V)
+#     return V,W
+def orthogcomp(W):
+    if np.abs(W[0]) > np.abs(W[1]):
+        #The component of max abs value is 0 or 2
+        invlength=1/np.sqrt(W[0]*W[0]+W[2]*W[2])
+        U=np.array([-W[2]*invlength,0,W[0]*invlength])
+    else:
+        #The component of max abs value is 1 or 2
+        invlength=1/np.sqrt(W[1]*W[1]+W[2]*W[2])
+        U=np.array([0,W[2]*invlength,-W[1]*invlength])
+    V=np.cross(W,U)
+    return U,V
+
+def computeeigen2(eigen0,U,V,A,eig0,eig1):
+    AU = A@U
+    AV = A@V
+    m00=np.dot(U,AU)-eig1
+    m01=np.dot(U,AV)-eig1
+    m11=np.dot(V,AV)-eig1
+    absM00=np.abs(m00)
+    absM01=np.abs(m01)
+    absM11=np.abs(m11)
+    if absM00>= absM11:
+        maxAbsComp=np.max([absM00,absM01])
+        if maxAbsComp > 0:
+            if absM00 >=absM01:
+                m01=m01/m00
+                m00=1/np.sqrt(1+m01*m01)
+                m01=m01*m00
+            else:
+                m00=m00/m01
+                m01=1/np.sqrt(1+m00*m00)
+                m00=m00*m01
+            eigenvector1=m01*U-m00*V
+        else:
+            eigenvector1=U
+    else:
+        maxAbsComp=np.max([absM11,absM01])
+        if maxAbsComp > 0:
+            if absM11 >=absM01:
+                m01 = m01/m11
+                m11=1/np.sqrt(1+m01*m01)
+                m01=m01*m11
+            else:
+                m11=m11/m01
+                m01=1/np.sqrt(1+m11*m11)
+                m11=m11*m01
+            eigenvector1=m11*U - m01*V
+        else:
+            eigenvector1=U
+    return eigenvector1
