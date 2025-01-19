@@ -22,7 +22,7 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
     QRtildestore=np.zeros((N,3,3),dtype=np.longdouble)
     tol=1e-4
     for n in range(N):
-        print("doing ",n,"of ",N)
+        #print("doing ",n,"of ",N)
         Mlist = TensorArray[n,:]
         Mten = np.array([[Mlist[0], Mlist[1], Mlist[2]],[Mlist[3], Mlist[4], Mlist[5]],[Mlist[6], Mlist[7], Mlist[8]]])#,dtype=np.clongdouble)
         Rtilde = np.real(Mten)#+np.diag(np.random.rand(3))*tol
@@ -41,7 +41,7 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         #uRtilde=np.sqrt(uRtilde)
         #uI=np.sqrt(uI)
         #uN0=np.sqrt(uN0)
-        print("R")
+        #print("R")
         uR,VR = np.linalg.eigh(R.astype(dtype=float))#jax.numpy.linalg.eig(R)
         uR=np.real(uR)
         VR=np.real(VR)
@@ -79,7 +79,7 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
 
 
         #print(uR,VR)
-        print("Rtilde")
+        #print("Rtilde")
         uRtilde,VRtilde = np.linalg.eigh(Rtilde.astype(dtype=float))#jax.numpy.linalg.eig(Rtilde)
         uRtilde=np.real(uRtilde)
         VRtilde=np.real(VRtilde)
@@ -108,7 +108,7 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         # # make orthonormal
         # VRtilde,dum=np.linalg.qr(VRtilde)
 
-        print("I")
+        #print("I")
         uI,VI = np.linalg.eigh(I.astype(dtype=float))#jax.numpy.linalg.eig(I)
         uI=np.real(uI)
         VI=np.real(VI)
@@ -194,10 +194,11 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         MultN0 = 1#CheckMult(uN0,N0.astype(dtype=float))
 
         # check ordering of eigenvalues and recompute if two are close
-        uR,VR=checkeigen(R,uR,VR)
-        uRtilde,VRtilde=checkeigen(Rtilde,uRtilde,VRtilde)
-        uI,VI=checkeigen(I,uI,VI)
-        uN0,VN0=checkeigen(N0,uN0,VN0)
+        #uR,VR=checkeigen(R,uR,VR,Frequencies[n])
+        #uRtilde,VRtilde=checkeigen(Rtilde,uRtilde,VRtilde,Frequencies[n])
+        uI,VI=checkeigen(I,uI,VI,Frequencies[n])
+        #print(Frequencies[n],uI,VI)
+        #uN0,VN0=checkeigen(N0,uN0,VN0)
 
 
 
@@ -252,21 +253,23 @@ def CheckMult(u,Tensor):
     return mult
 
 
-def checkeigen(M,u,Q):
-    order=np.argsort(u)
-    # Order in ascending order
+def checkeigen(M,u,Q,omega):
+    order=np.argsort(np.abs(u))
+    # Order in absolute ascending order
     u=u[order]
     Q=Q[:,order]
     mult=-1*np.ones(3)
     tag=0
-    tol=1e-3
+    tol=2e-2#5e-1,1e-1,5e-2,1e-3#5e-2
     for i in range(3):
         for j in range(i+1,3):
-            if np.abs(u[i]-u[j])/np.abs(u[i]) < tol:
+            if np.abs(u[i]-u[j])/np.abs(u[i]) < tol and mult[j]==-1:
                 mult[i]=j
                 mult[j]=i
                 tag=1
+
     if tag==1:
+        print("getting new eigenvectors",omega)
         #print(u)
         #print(Q)
         for i in range(3):
@@ -294,6 +297,7 @@ def checkeigen(M,u,Q):
         Q[:,1]=q2[:]
         Q[:,2]=q3[:]
         u=np.array([u1,u2,u3])
+        #print(u)
         #print(Q)
         #time.sleep(10)
     return u,Q
