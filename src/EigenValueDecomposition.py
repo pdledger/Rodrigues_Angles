@@ -194,9 +194,9 @@ def EigenValueDecomposition(N0,TensorArray,Frequencies):
         MultN0 = 1#CheckMult(uN0,N0.astype(dtype=float))
 
         # check ordering of eigenvalues and recompute if two are close
-        #uR,VR=checkeigen(R,uR,VR,Frequencies[n])
-        #uRtilde,VRtilde=checkeigen(Rtilde,uRtilde,VRtilde,Frequencies[n])
-        uI,VI=checkeigen(I,uI,VI,Frequencies[n])
+        uR,VR=checkeigen(R,uR,VR,Frequencies[n],"R")
+        uRtilde,VRtilde=checkeigen(Rtilde,uRtilde,VRtilde,Frequencies[n],"Rtilde")
+        uI,VI=checkeigen(I,uI,VI,Frequencies[n],"I")
         #print(Frequencies[n],uI,VI)
         #uN0,VN0=checkeigen(N0,uN0,VN0)
 
@@ -253,14 +253,15 @@ def CheckMult(u,Tensor):
     return mult
 
 
-def checkeigen(M,u,Q,omega):
+def checkeigen(M,u,Q,omega,mytype):
     order=np.argsort(np.abs(u))
     # Order in absolute ascending order
     u=u[order]
     Q=Q[:,order]
     mult=-1*np.ones(3)
     tag=0
-    tol=2e-2#5e-1,1e-1,5e-2,1e-3#5e-2
+    #tol=2e-2#5e-1,1e-1,5e-2,1e-3#5e-2
+    tol=1e-12
     for i in range(3):
         for j in range(i+1,3):
             if np.abs(u[i]-u[j])/np.abs(u[i]) < tol and mult[j]==-1:
@@ -269,7 +270,7 @@ def checkeigen(M,u,Q,omega):
                 tag=1
 
     if tag==1:
-        print("getting new eigenvectors",omega)
+        print("getting new eigenvectors",mytype,omega)
         #print(u)
         #print(Q)
         for i in range(3):
